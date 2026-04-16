@@ -1,0 +1,21 @@
+title: DailyBliss
+description: Spiritual Wellness Apps — rooted in ancient wisdom, designed for modern living.
+url: https://dailybliss.github.io
+email: dailybliss2026@gmail.com
+
+# Keep build simple
+markdown: kramdown
+permalink: pretty
+
+# Files to exclude from build
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor/
+
+# Site-wide values usable in templates as site.data.*
+nav:
+  - { label: "Apps",  url: "/apps/" }
+  - { label: "Tools", url: "/tools/" }
+  - { label: "Blog",  url: "/blog/" }
