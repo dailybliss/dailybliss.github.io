@@ -1,28 +1,186 @@
 ---
 layout: default
-title: Tools
-description: Free interactive tools for your spiritual practice.
+title: null
+description: Thoughtfully crafted apps for your daily spiritual practice — rooted in ancient wisdom, designed for modern living.
 ---
 
-<article class="page">
-  <div class="eyebrow">DailyBliss</div>
-  <h1>Tools</h1>
-  <p class="lede">
-    Free, no-sign-up tools that run entirely in your browser.
-  </p>
+<style>
+  /* Homepage-only styles — hero + app card grid.
+     Everything else inherits from the shared layout. */
 
-  <ul class="post-list">
-    <li>
-      <a href="{{ '/tools/brahma-muhurta/' | relative_url }}">
-        <h3>Brahma Muhurta Calculator</h3>
-        <p>Find tomorrow's pre-dawn meditation window for your exact location.</p>
+  /* Tighter top padding on homepage specifically — hero sits closer to the nav */
+  .page { padding-top: 24px; }
+
+  .home-hero {
+    text-align: center;
+    padding: 28px 0 32px;
+    animation: fadeUp 1s ease both;
+  }
+  .home-hero-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 300;
+    color: var(--gold);
+    letter-spacing: 6px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .home-hero-tagline {
+    font-size: 14px;
+    color: var(--subtle);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .home-hero-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 24px auto;
+    opacity: 0.4;
+  }
+  .home-hero-description {
+    font-size: 16px;
+    color: var(--ink-softer);
+    line-height: 1.8;
+    max-width: 500px;
+    margin: 0 auto;
+    font-weight: 300;
+  }
+
+  .apps-section { padding: 16px 0 60px; }
+
+  .section-label {
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #8a6020;
+    margin-bottom: 32px;
+  }
+
+  .apps-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 600px) {
+    .apps-grid { grid-template-columns: 1fr; }
+    .home-hero-name { font-size: 32px; }
+  }
+
+  .app-card {
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid var(--lavender);
+    border-radius: 20px;
+    padding: 28px 24px;
+    transition: border-color 0.3s, transform 0.3s;
+    animation: fadeUp 1s ease both;
+    text-decoration: none;
+    display: block;
+    color: inherit;
+  }
+  .app-card:hover {
+    border-color: rgba(160, 100, 20, 0.5);
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+  .app-card:nth-child(2) { animation-delay: 0.15s; }
+
+  .home-app-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    border: 1px solid rgba(232, 184, 75, 0.3);
+  }
+  .home-app-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .home-app-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--gold-dim);
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+  .home-app-subtitle {
+    font-size: 12px;
+    color: #6a5a9a;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .home-app-description {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+  .home-app-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--gold-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+  .home-app-cta::after { content: '→'; transition: transform 0.2s; }
+  .app-card:hover .home-app-cta::after { transform: translateX(4px); }
+</style>
+
+<div class="page">
+
+  <div class="home-hero">
+    <div class="home-hero-name">DailyBliss</div>
+    <div class="home-hero-tagline">Spiritual Wellness Apps</div>
+    <div class="home-hero-divider"></div>
+    <p class="home-hero-description">
+      Thoughtfully crafted apps for your daily spiritual practice —
+      rooted in ancient wisdom, designed for modern living.
+    </p>
+  </div>
+
+  <div class="apps-section">
+    <div class="section-label">Our Apps</div>
+    <div class="apps-grid">
+
+      <a class="app-card" href="{{ '/apps/serenerise/' | relative_url }}">
+        <div class="home-app-icon">
+          <img src="{{ '/assets/serenerise.jpg' | relative_url }}" alt="SereneRise">
+        </div>
+        <div class="home-app-name">SereneRise</div>
+        <div class="home-app-subtitle">Brahma Muhurta · Time &amp; Widget</div>
+        <p class="home-app-description">
+          Precise daily Brahma Muhurta times for your exact location.
+          Home screen widget. Automatic hourly refresh.
+          Works anywhere in the world.
+        </p>
+        <span class="home-app-cta">Learn more</span>
       </a>
-    </li>
-    <li>
-      <a href="{{ '/tools/brahma-muhurta-calendar/' | relative_url }}">
-        <h3>Brahma Muhurta Calendar</h3>
-        <p>Annual Brahma Muhurta times for any city — browse month by month, share as CSV.</p>
+
+      <a class="app-card" href="{{ '/apps/vedicwisdom/' | relative_url }}">
+        <div class="home-app-icon">
+          <img src="{{ '/assets/vedicwisdom.jpg' | relative_url }}" alt="Vedic Wisdom">
+        </div>
+        <div class="home-app-name">Vedic Wisdom</div>
+        <div class="home-app-subtitle">Daily Quote · Widget</div>
+        <p class="home-app-description">
+          One inspiring quote every day from the Bhagavad Gita,
+          Upanishads, Vivekananda, Buddha and Kabir.
+          Beautiful home screen widget.
+        </p>
+        <span class="home-app-cta">Learn more</span>
       </a>
-    </li>
-  </ul>
-</article>
+
+    </div>
+  </div>
+
+</div>
