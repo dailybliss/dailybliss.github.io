@@ -61,7 +61,7 @@ description: Thoughtfully crafted apps for your daily spiritual practice — roo
 
   .apps-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 24px;
   }
   @media (max-width: 600px) {
@@ -87,7 +87,7 @@ description: Thoughtfully crafted apps for your daily spiritual practice — roo
   }
   .app-card:nth-child(2) { animation-delay: 0.15s; }
   .app-card:nth-child(3) { animation-delay: 0.3s; }
-  .app-card:nth-child(4) { animation-delay: 0.45s; }
+  /* .app-card:nth-child(4) { animation-delay: 0.45s; } — re-enable when 4th app is live */
 
   .home-app-icon {
     width: 56px;
@@ -168,6 +168,7 @@ description: Thoughtfully crafted apps for your daily spiritual practice — roo
         <span class="home-app-cta">Learn more</span>
       </a>
 
+      <!-- SERENEALARM — commented out while app is unavailable
       <a class="app-card" href="{{ '/apps/serenealarm/' | relative_url }}">
         <div class="home-app-icon">
           <img src="{{ '/assets/serenealarm.jpg' | relative_url }}" alt="SereneAlarm">
@@ -180,6 +181,7 @@ description: Thoughtfully crafted apps for your daily spiritual practice — roo
         </p>
         <span class="home-app-cta">Learn more</span>
       </a>
+      -->
 
       <a class="app-card" href="{{ '/apps/mantracounter/' | relative_url }}">
         <div class="home-app-icon">
