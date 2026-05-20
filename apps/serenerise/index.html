@@ -1,7 +1,7 @@
 ---
 layout: default
 title: SereneRise — Brahma Muhurta Time & Widget
-description: Precise daily Brahma Muhurta times for your exact location, right on your home screen.
+description: Precise daily Brahma Muhurta times for your exact location, right on your home screen. Available on Android and iOS.
 ---
 
 <article class="page">
@@ -14,16 +14,22 @@ description: Precise daily Brahma Muhurta times for your exact location, right o
       <div class="eyebrow">SereneRise</div>
       <h1>Brahma Muhurta, on your home screen</h1>
       <p class="lede">
-        Precise daily Brahma Muhurta times for your exact location. Automatic hourly refresh.
-        Works anywhere in the world.
+        Precise daily Brahma Muhurta times for your exact location.
+        Works anywhere in the world, on Android and iOS.
       </p>
-      <a href="https://play.google.com/store/apps/details?id=com.dailybliss.serenerise"
-         class="btn" target="_blank" rel="noopener">
-        Available on Google Play →
-      </a>
-      <a href="{{ '/apps/serenerise/privacy/' | relative_url }}" class="btn btn-ghost" style="margin-left: 8px;">
-        Privacy Policy
-      </a>
+      <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+        <a href="https://play.google.com/store/apps/details?id=com.dailybliss.serenerise"
+           class="btn" target="_blank" rel="noopener">
+          Google Play →
+        </a>
+        <a href="https://apps.apple.com/app/serenerise/id000000000"
+           class="btn" target="_blank" rel="noopener">
+          App Store →
+        </a>
+        <a href="{{ '/apps/serenerise/privacy/' | relative_url }}" class="btn btn-ghost">
+          Privacy Policy
+        </a>
+      </div>
     </div>
   </section>
 
@@ -40,9 +46,10 @@ description: Precise daily Brahma Muhurta times for your exact location, right o
       no need to open the app.</p>
     </div>
     <div class="feature">
-      <h4>Automatic hourly refresh</h4>
-      <p>The widget updates itself throughout the day so you always see the correct time,
-      even as you travel across time zones.</p>
+      <h4>Widget refresh</h4>
+      <p>On Android, the widget refreshes hourly if you grant background location — useful
+      if you travel frequently. Without it, and on iOS, the widget refreshes daily at midnight,
+      always correct for the coming day.</p>
     </div>
     <div class="feature">
       <h4>No account, no tracking</h4>
@@ -99,9 +106,14 @@ description: Precise daily Brahma Muhurta times for your exact location, right o
   <details class="faq-item">
     <summary>The widget isn't updating. What should I do?</summary>
     <p>
-      Android aggressively manages background processes, especially on certain manufacturer
-      skins. If the widget stops refreshing, open the app once — it will force an update.
-      Also check that battery optimization isn't restricting SereneRise.
+      <strong>Android:</strong> If you have granted background location, the widget refreshes
+      hourly — if it stops, open the app once to force an update, and check that battery
+      optimization isn't restricting SereneRise. If you haven't granted background location,
+      the widget refreshes daily at midnight, which is the expected behaviour.
+    </p>
+    <p>
+      <strong>iOS:</strong> The widget refreshes once daily at midnight. If it appears stale,
+      open the app once to trigger a manual refresh.
     </p>
   </details>
 
@@ -114,9 +126,13 @@ description: Precise daily Brahma Muhurta times for your exact location, right o
   </details>
 
   <details class="faq-item">
-    <summary>Is there an iOS version?</summary>
+    <summary>What is the difference between the Android and iOS versions?</summary>
     <p>
-      Not yet. SereneRise is currently Android-only.
+      The core experience is the same on both platforms. Both versions update your location
+      automatically when you move more than 50km — on Android this happens in the background
+      (if background location is granted), on iOS it happens the next time you open the app.
+      The widget refresh also differs: on Android with background location granted the widget
+      refreshes hourly; without it on Android, or on iOS, it refreshes once daily at midnight.
     </p>
   </details>
 
