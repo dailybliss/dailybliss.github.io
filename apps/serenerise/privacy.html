@@ -39,15 +39,17 @@ description: How SereneRise handles your data — what we collect, how we use it
 
   <p><strong>iOS</strong></p>
   <ul>
-    <li><strong>Foreground location</strong> ("While using the app") — used to calculate times when the app is open.</li>
-    <li>Background location ("Always") is <strong>not requested</strong> on iOS. Location is checked when you open the app — if you have moved more than 50 kilometres from your previously saved location, it updates automatically.</li>
-    <li>The widget refreshes daily at midnight using your last saved location.</li>
+    <li><strong>Foreground location</strong> ("While using the app") — used to calculate times when the app is open. This permission is <strong>optional</strong> on iOS — if you prefer not to grant it, you can enter your city manually and the app will calculate accurate times from that.</li>
+    <li>Background location ("Always") is <strong>not requested</strong> on iOS.</li>
+    <li>If location access is granted, the app checks when you open it — if you have moved more than 50 kilometres from your previously saved location, it updates automatically.</li>
+    <li>The widget refreshes daily at midnight using your last saved location or manually entered city.</li>
   </ul>
 
   <p>On both platforms:</p>
   <ul>
     <li>Location data is stored locally on your device only.</li>
     <li>Location is never transmitted to any external server.</li>
+    <li>On iOS, location permission is entirely optional — the app works fully without it if you enter your city manually.</li>
   </ul>
 
   <h3>Device Information</h3>
@@ -109,9 +111,11 @@ description: How SereneRise handles your data — what we collect, how we use it
     <li>Only accessed when a significant location change (50km+) is detected</li>
   </ul>
   <p>
-    On iOS, background location is not requested. When you open the app, it checks whether
-    you have moved more than 50km from your last saved location and updates automatically
-    if so. The widget then refreshes at midnight with the updated location.
+    On iOS, background location is not requested. Location permission is also fully optional
+    — if you prefer not to grant it, you can enter your city manually and the app calculates
+    accurate times from that. If location access is granted, the app checks on open whether
+    you have moved more than 50km and updates automatically if so. The widget refreshes at
+    midnight with the latest saved location or city.
   </p>
 
   <h2>7. Security</h2>
