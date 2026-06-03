@@ -34,7 +34,7 @@ description: How SereneRise handles your data — what we collect, how we use it
   <ul>
     <li><strong>Foreground location</strong> ("While using the app") — used to calculate times when the app is open.</li>
     <li><strong>Background location</strong> ("Allow all the time") — optional. When granted, the widget refreshes hourly and updates your location automatically when you travel more than 50km. This is designed for users who travel frequently between cities. Without this permission, the widget refreshes daily at midnight using your last saved location.</li>
-    <li>Location is never transmitted to any external server regardless of which permission is granted.</li>
+    <li>Location data is stored locally on your device only and is never transmitted to any external server, regardless of which permission is granted.</li>
   </ul>
 
   <p><strong>iOS</strong></p>
@@ -45,11 +45,20 @@ description: How SereneRise handles your data — what we collect, how we use it
     <li>The widget refreshes daily at midnight using your last saved location or manually entered city.</li>
   </ul>
 
-  <p>On both platforms:</p>
+  <p>On both platforms, your location data is stored locally on your device only and is never transmitted to any external server.</p>
+
+  <h3>Analytics Data (Android only)</h3>
+  <p>
+    On Android, the App uses <strong>Google Firebase Analytics</strong> to understand how
+    a key feature is used. Specifically, the App records anonymous, aggregated events when
+    you <strong>add or remove the home screen widget</strong>. This helps us understand whether
+    the widget is useful to people and prioritise improvements to it.
+  </p>
   <ul>
-    <li>Location data is stored locally on your device only.</li>
-    <li>Location is never transmitted to any external server.</li>
-    <li>On iOS, location permission is entirely optional — the app works fully without it if you enter your city manually.</li>
+    <li>These analytics events do <strong>not</strong> include your location, name, email, or any personally identifiable information.</li>
+    <li>The only information recorded is that a widget was added or removed, along with the standard technical and device information that Firebase Analytics collects automatically (such as device model, operating system version, app version, and a non-identifying app instance identifier).</li>
+    <li>This data is processed by Google as part of the Firebase service. Google's handling of this data is governed by the <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">Firebase Privacy and Security policy</a> and the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.</li>
+    <li>Analytics is used only on Android. The iOS version does not include any analytics.</li>
   </ul>
 
   <h3>Device Information</h3>
@@ -77,20 +86,22 @@ description: How SereneRise handles your data — what we collect, how we use it
     <li>To update the home screen widget — hourly on Android when background location is granted (for travellers), or daily at midnight on both Android (without background location) and iOS.</li>
     <li>To update location automatically when a 50km+ move is detected — on Android this happens in the background (when background location is granted), on iOS this happens when you next open the app.</li>
     <li>To verify subscription status through Google Play Billing (Android) or Apple In-App Purchases (iOS).</li>
+    <li>On Android, to understand whether the home screen widget is being used, via anonymous widget add/remove analytics events.</li>
     <li>To improve app stability and performance.</li>
   </ul>
 
   <h2>4. Data Storage</h2>
   <ul>
-    <li>All data including location, subscription status, and preferences is stored <strong>locally on your device only</strong>.</li>
-    <li>No data is transmitted to or stored on any external server or cloud service.</li>
-    <li>The App functions completely offline — no internet connection is required except for subscription purchase and verification.</li>
+    <li>Your location, subscription status, and preferences are stored <strong>locally on your device only</strong> and are never transmitted to any external server.</li>
+    <li>The App's core functionality works completely offline — an internet connection is only required for subscription purchase and verification, and (on Android) for sending the anonymous widget analytics events described above.</li>
+    <li>The only data that leaves your device is the anonymous widget add/remove analytics on Android, processed by Google Firebase as described in Section 2.</li>
   </ul>
 
   <h2>5. Data Sharing</h2>
   <ul>
     <li>We do not sell, trade, or rent user information.</li>
-    <li>We do not share location data with any third party.</li>
+    <li>We do not share your location data with any third party.</li>
+    <li>On Android, anonymous widget usage analytics are processed by <strong>Google Firebase Analytics</strong> as part of providing that service. This data contains no personally identifiable information and is never used for advertising or sold to anyone.</li>
     <li>Subscription and payment processing are handled securely by <strong>Google Play Billing</strong> (Android) or <strong>Apple In-App Purchases</strong> (iOS).</li>
   </ul>
 
@@ -120,19 +131,29 @@ description: How SereneRise handles your data — what we collect, how we use it
 
   <h2>7. Security</h2>
   <p>
-    All data is stored locally on your device using the platform's secure storage —
-    Android's SharedPreferences and iOS's UserDefaults and Keychain where appropriate.
-    No sensitive data is transmitted over the internet.
+    Your location, preferences, and subscription status are stored locally on your device using
+    the platform's secure storage — Android's SharedPreferences and iOS's UserDefaults and
+    Keychain where appropriate. This sensitive data is never transmitted over the internet.
+    The only data transmitted from the App is the anonymous widget usage analytics on Android,
+    which contains no personally identifiable information and is sent securely to Google Firebase.
   </p>
 
-  <h2>8. Changes to This Policy</h2>
+  <h2>8. Your Choices</h2>
+  <p>
+    You can opt out of analytics collection at the operating system level by disabling
+    usage and diagnostics sharing in your Android device settings. You can also reset or
+    limit your advertising identifier through your device's privacy settings. Disabling
+    analytics does not affect the App's functionality in any way.
+  </p>
+
+  <h2>9. Changes to This Policy</h2>
   <p>
     We may update this Privacy Policy from time to time. Any changes will be posted within
     the App, on the Play Store and App Store listings, and the effective date will be updated.
     Continued use of the App after changes constitutes acceptance of the updated policy.
   </p>
 
-  <h2>9. Contact Us</h2>
+  <h2>10. Contact Us</h2>
   <p>
     If you have questions or concerns about this Privacy Policy, please contact us at:
   </p>
