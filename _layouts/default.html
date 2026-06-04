@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18125079213"></script>
+  <!-- Google tag (gtag.js) with Consent Mode v2 -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+
+    // Consent Mode v2 — default to DENIED for everyone until a choice is made.
+    // The EEA banner (see consent-banner.html) updates this on user action.
+    // Non-EEA visitors are granted automatically further below.
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied',
+      'wait_for_update': 500
+    });
+
     gtag('js', new Date());
     gtag('config', 'AW-18125079213');
   </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18125079213"></script>
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -476,5 +488,6 @@
     {{ content }}
   </main>
   {% include footer.html %}
+  {% include consent-banner.html %}
 </body>
 </html>
