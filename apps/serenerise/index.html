@@ -4,6 +4,24 @@ title: SereneRise — Brahma Muhurta Time & Widget
 description: Precise daily Brahma Muhurta times for your exact location, right on your home screen. Available on Android and iOS.
 ---
 
+<!-- Google Ads conversion: App Store button click -->
+<script>
+function gtag_report_conversion(url) {
+  var callback = function () {
+    if (typeof(url) != 'undefined') {
+      window.location = url;
+    }
+  };
+  gtag('event', 'conversion', {
+      'send_to': 'AW-18125079213/iSZGCNKBxbgcEK2F28JD',
+      'value': 1.0,
+      'currency': 'INR',
+      'event_callback': callback
+  });
+  return false;
+}
+</script>
+
 <article class="page">
 
   <section class="app-hero">
@@ -17,14 +35,17 @@ description: Precise daily Brahma Muhurta times for your exact location, right o
         Precise daily Brahma Muhurta times for your exact location.
         Works anywhere in the world, on Android and iOS.
       </p>
-      <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+      <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:4px;">
         <a href="https://play.google.com/store/apps/details?id=com.dailybliss.serenerise"
-           class="btn" target="_blank" rel="noopener">
-          Google Play →
+           target="_blank" rel="noopener" aria-label="Get SereneRise on Google Play">
+          <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+               alt="Get it on Google Play" height="56" style="display:block;">
         </a>
-        <a href="https://apps.apple.com/us/app/serenerise/id6767189781"
-           class="btn" target="_blank" rel="noopener">
-          App Store →
+        <a href="https://apps.apple.com/app/serenerise/id000000000"
+           target="_blank" rel="noopener" aria-label="Download SereneRise on the App Store"
+           onclick="gtag_report_conversion();">
+          <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83"
+               alt="Download on the App Store" height="56" style="display:block;">
         </a>
         <a href="{{ '/apps/serenerise/privacy/' | relative_url }}" class="btn btn-ghost">
           Privacy Policy
