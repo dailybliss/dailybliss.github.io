@@ -1,0 +1,108 @@
+<!-- Cookie / consent banner — shown only to EEA visitors. Updates Google Consent Mode v2. -->
+<div id="consent-banner" style="display:none; position:fixed; left:0; right:0; bottom:0; z-index:9999;
+     background:rgba(26,21,53,0.97); backdrop-filter:blur(8px);
+     border-top:1px solid rgba(176,120,32,0.4); padding:20px 24px;
+     box-shadow:0 -8px 30px rgba(0,0,0,0.25);">
+  <div style="max-width:860px; margin:0 auto; display:flex; align-items:center;
+       gap:20px; flex-wrap:wrap; justify-content:space-between;">
+    <p style="margin:0; color:#e8dff5; font-family:'Jost',sans-serif; font-weight:300;
+       font-size:13px; line-height:1.6; flex:1; min-width:260px;">
+      We use cookies to measure and improve our ads. You can accept or decline.
+      See our <a href="{{ '/privacy/' | relative_url }}" style="color:#d4a140; text-decoration:underline;">privacy notice</a>.
+    </p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button onclick="dbConsent(false)" style="cursor:pointer; font-family:'Jost',sans-serif;
+        font-size:13px; letter-spacing:1px; padding:9px 18px; border-radius:22px;
+        background:transparent; border:1px solid rgba(160,130,200,0.4); color:#c5b8dd;">
+        Decline
+      </button>
+      <button onclick="dbConsent(true)" style="cursor:pointer; font-family:'Jost',sans-serif;
+        font-size:13px; letter-spacing:1px; padding:9px 18px; border-radius:22px;
+        background:rgba(176,120,32,0.9); border:1px solid rgba(176,120,32,1); color:#fff;">
+        Accept
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  function gtag(){ dataLayer.push(arguments); }
+
+  // Timezone-based EEA detection (no network call, privacy-friendly, good enough for consent gating).
+  var EEA_ZONES = [
+    'Europe/Vienna','Europe/Brussels','Europe/Sofia','Europe/Zagreb','Asia/Famagusta','Asia/Nicosia',
+    'Europe/Prague','Europe/Copenhagen','Europe/Tallinn','Europe/Helsinki','Europe/Paris',
+    'Europe/Berlin','Europe/Busingen','Europe/Athens','Europe/Budapest','Atlantic/Reykjavik',
+    'Europe/Dublin','Europe/Rome','Europe/Riga','Europe/Vaduz','Europe/Vilnius','Europe/Luxembourg',
+    'Europe/Malta','Europe/Amsterdam','Europe/Oslo','Europe/Warsaw','Atlantic/Azores',
+    'Atlantic/Madeira','Europe/Lisbon','Europe/Bucharest','Europe/Bratislava','Europe/Ljubljana',
+    'Africa/Ceuta','Atlantic/Canary','Europe/Madrid','Europe/Stockholm'
+  ];
+
+  function isEEA() {
+    try {
+      var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      return EEA_ZONES.indexOf(tz) !== -1;
+    } catch (e) {
+      return true; // if detection fails, treat as EEA (safer / more conservative)
+    }
+  }
+
+  function grantAll() {
+    gtag('consent', 'update', {
+      'ad_storage': 'granted',
+      'ad_user_data': 'granted',
+      'ad_personalization': 'granted',
+      'analytics_storage': 'granted'
+    });
+  }
+
+  function denyAll() {
+    gtag('consent', 'update', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied'
+    });
+  }
+
+  // Persist choice for ~6 months
+  function setChoice(v) {
+    try {
+      var d = new Date(); d.setMonth(d.getMonth() + 6);
+      document.cookie = 'db_consent=' + v + '; expires=' + d.toUTCString() + '; path=/; SameSite=Lax';
+    } catch (e) {}
+  }
+  function getChoice() {
+    var m = document.cookie.match(/(?:^|;\s*)db_consent=([^;]+)/);
+    return m ? m[1] : null;
+  }
+
+  // Exposed for the buttons
+  window.dbConsent = function(accepted) {
+    if (accepted) { grantAll(); setChoice('granted'); }
+    else { denyAll(); setChoice('denied'); }
+    var b = document.getElementById('consent-banner');
+    if (b) b.style.display = 'none';
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var prior = getChoice();
+
+    if (!isEEA()) {
+      // Outside EEA: consent not required — grant so ads/measurement work normally.
+      grantAll();
+      return;
+    }
+
+    // EEA visitor
+    if (prior === 'granted') { grantAll(); return; }
+    if (prior === 'denied')  { denyAll();  return; }
+
+    // No prior choice — show banner (defaults already 'denied' from the head tag)
+    var b = document.getElementById('consent-banner');
+    if (b) b.style.display = 'block';
+  });
+})();
+</script>
