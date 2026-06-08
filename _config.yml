@@ -18,5 +18,4 @@ exclude:
 nav:
   - { label: "Apps",  url: "/apps/" }
   - { label: "Tools", url: "/tools/" }
-  - { label: "Cities", url: "/brahma-muhurta/" }
   - { label: "Blog",  url: "/blog/" }
