@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 646 250" role="img" aria-label="Get it on Google Play">
+  <rect width="646" height="250" rx="30" fill="#000"/>
+  <rect x="3" y="3" width="640" height="244" rx="27" fill="none" stroke="#a6a6a6" stroke-width="5"/>
+
+  <!-- Play Store icon — standard 4-triangle design -->
+  <g transform="translate(50, 55) scale(5.5)">
+    <!-- Left/teal triangle (main body) -->
+    <path d="M2 1.5 L2 24.5 L14.5 13Z" fill="#00D0FF"/>
+    <!-- Top/red triangle -->
+    <path d="M2 1.5 L14.5 13 L19 8.5 L7 1.5Z" fill="#FF3D5A"/>
+    <!-- Bottom/yellow triangle -->
+    <path d="M2 24.5 L14.5 13 L19 17.5 L7 24.5Z" fill="#FFB900"/>
+    <!-- Right/green triangle -->
+    <path d="M14.5 13 L19 8.5 L23.5 13 L19 17.5Z" fill="#00DF76"/>
+  </g>
+
+  <!-- Text -->
+  <text x="185" y="108" font-family="Arial, Helvetica, sans-serif"
+        font-size="42" fill="#fff" opacity="0.82" letter-spacing="2">GET IT ON</text>
+  <text x="185" y="182" font-family="Arial, Helvetica, sans-serif"
+        font-size="78" font-weight="500" fill="#fff" letter-spacing="-1">Google Play</text>
+</svg>

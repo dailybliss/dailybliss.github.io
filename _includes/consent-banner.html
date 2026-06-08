@@ -87,6 +87,15 @@
     if (b) b.style.display = 'none';
   };
 
+  // Exposed so users can re-open the banner and change their choice at any time
+  // (required: withdrawing consent must be as easy as giving it).
+  window.dbResetConsent = function() {
+    var b = document.getElementById('consent-banner');
+    if (b) { b.style.display = 'block'; }
+    else { alert('Consent options are available on the home page.'); }
+    return false;
+  };
+
   document.addEventListener('DOMContentLoaded', function() {
     var prior = getChoice();
 
