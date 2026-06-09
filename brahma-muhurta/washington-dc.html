@@ -1,18 +1,18 @@
 ---
 layout: default
-title: "Brahma Muhurta Time in Washington DC (Today & Tomorrow)"
-description: "Find the Brahma Muhurta time today and tomorrow in Washington DC. Calculated from Washington DC's exact local sunrise — free, accurate, no sign-up."
+title: "Brahma Muhurta Time in Washington DC (Today, Tomorrow & 7 Days)"
+description: "Find the Brahma Muhurta time today, tomorrow, and for the next 7 days in Washington DC. Calculated from Washington DC's exact local sunrise — free, accurate, no sign-up."
 ---
 
 <article class="page content">
   <div class="eyebrow">Brahma Muhurta · DC metro area</div>
   <h1>Brahma Muhurta Time in Washington DC</h1>
-  <p class="meta">Today and tomorrow's pre-dawn window, calculated from Washington DC's local sunrise.</p>
+  <p class="meta">Today, tomorrow, and the next 7 days — calculated from Washington DC's local sunrise.</p>
 
   <p class="lede">
-    Find the Brahma Muhurta time today and tomorrow in Washington DC. Because Brahma Muhurta is calculated
-    from sunrise, the exact time is specific to Washington DC and changes a little each day — the calculator
-    below gives the precise window for your date.
+    Find the Brahma Muhurta time today and tomorrow in Washington DC, plus the full window for the next
+    seven days. Because Brahma Muhurta is calculated from sunrise, the exact time is specific to
+    Washington DC and changes a little each day — the times below are calculated live for your dates.
   </p>
 
   <div class="tool-panel" id="tool">
@@ -26,18 +26,33 @@ description: "Find the Brahma Muhurta time today and tomorrow in Washington DC. 
     </div>
   </div>
 
-  <h2>Brahma Muhurta Time Today &amp; Tomorrow in Washington DC</h2>
+  <h2>Brahma Muhurta Time in Washington DC — Next 7 Days</h2>
   <p>
-    There is no single fixed Brahma Muhurta time in Washington DC. It begins about 96 minutes before
-    sunrise and lasts about 48 minutes, so as Washington DC's sunrise shifts through the year, the Brahma
-    Muhurta time shifts with it. At this mid-latitude, sunrise times swing noticeably between summer and winter, so the Brahma Muhurta window moves with them. The calculator above always shows the correct,
-    current window for Washington DC.
+    The Brahma Muhurta window for Washington DC for the coming week. Each day's window begins about 96
+    minutes before local sunrise and lasts about 48 minutes.
   </p>
-  <p>
-    Across the year, the Brahma Muhurta time in Washington DC can move noticeably — often by well over an hour. This is why a fixed
-    clock time is never accurate — the window is tied to Washington DC's real sunrise, which is exactly what
-    the calculator uses.
-  </p>
+  <div style="overflow-x:auto;">
+    <table id="week-table" style="width:100%; border-collapse:collapse; font-size:15px; margin:16px 0;">
+      <thead>
+        <tr style="border-bottom:2px solid var(--lavender,#d9cfe8);">
+          <th style="text-align:left; padding:10px 8px; font-family:'Cormorant Garamond',serif; font-size:17px; color:var(--ink);">Date</th>
+          <th style="text-align:left; padding:10px 8px; font-family:'Cormorant Garamond',serif; font-size:17px; color:var(--ink);">Brahma Muhurta</th>
+          <th style="text-align:left; padding:10px 8px; font-family:'Cormorant Garamond',serif; font-size:17px; color:var(--ink);">Sunrise</th>
+        </tr>
+      </thead>
+      <tbody id="week-body">
+        <tr><td colspan="3" style="padding:12px 8px; color:var(--subtle);">Calculating…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="cross-card">
+    <div class="cross-card-text">
+      <strong>Want the full year for Washington DC?</strong>
+      <p>See every day's Brahma Muhurta time and download an annual calendar.</p>
+    </div>
+    <a href="{{ '/tools/brahma-muhurta-calendar/' | relative_url }}" class="btn btn-ghost">Annual calendar →</a>
+  </div>
 
   <h2>What is Brahma Muhurta?</h2>
   <p>
@@ -49,6 +64,13 @@ description: "Find the Brahma Muhurta time today and tomorrow in Washington DC. 
   <p>
     Washington DC is home to a large Indian-American community across Northern Virginia and the Maryland suburbs, and many here keep the practice of rising in Brahma Muhurta for meditation
     and yoga — a tradition carried from India and adapted to life in DC metro area.
+  </p>
+
+  <h2>Why the Time Changes Each Day in Washington DC</h2>
+  <p>
+    There is no single fixed Brahma Muhurta time in Washington DC. At this mid-latitude, sunrise times swing noticeably between summer and winter, so the Brahma Muhurta window moves with them. Across the year, the
+    Brahma Muhurta time in Washington DC can move noticeably — often by well over an hour. This is why the times above are calculated
+    from Washington DC's real sunrise rather than given as a fixed clock time.
   </p>
 
   <h2>Why Practise in Brahma Muhurta?</h2>
@@ -70,7 +92,6 @@ description: "Find the Brahma Muhurta time today and tomorrow in Washington DC. 
   <p style="font-size:14px;color:var(--subtle);">
     See also: <a href="{{ '/blog/brahma-muhurta-time-by-city/' | relative_url }}">Brahma Muhurta time by city</a>
     · <a href="{{ '/blog/brahma-muhurta-complete-guide/' | relative_url }}">the complete guide</a>
-    · <a href="{{ '/tools/brahma-muhurta-calendar/' | relative_url }}">full-year calendar for Washington DC</a>
   </p>
 </article>
 
@@ -96,6 +117,9 @@ function calcSunrise(date, lat, lon) {
 (function(){
   var LAT=38.895, LON=-77.037, TZ="America/New_York";
   function fmt(d){ return d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true,timeZone:TZ}); }
+  function fmtDate(d){ return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:TZ}); }
+
+  // Headline: tomorrow
   var now=new Date(), tom=new Date(now); tom.setDate(now.getDate()+1);
   var utc=new Date(Date.UTC(tom.getFullYear(),tom.getMonth(),tom.getDate()));
   var sr=calcSunrise(utc,LAT,LON);
@@ -103,11 +127,28 @@ function calcSunrise(date, lat, lon) {
     var st=new Date(sr.getTime()-96*60*1000), en=new Date(st.getTime()+48*60*1000);
     document.getElementById('tool-window-display').textContent=fmt(st)+' – '+fmt(en);
     document.getElementById('tool-sunrise').textContent=fmt(sr);
-    document.getElementById('tool-loc').textContent='Washington DC · '+tom.toDateString();
+    document.getElementById('tool-loc').textContent='Washington DC · '+fmtDate(tom);
     document.getElementById('tool-result').style.display='block';
     document.getElementById('tool-loading').style.display='none';
   } else {
     document.getElementById('tool-loading').textContent='Could not calculate for this date.';
   }
+
+  // 7-day table: today + next 6 days
+  var rows='';
+  for(var i=0;i<7;i++){
+    var d=new Date(now); d.setDate(now.getDate()+i);
+    var u=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
+    var s=calcSunrise(u,LAT,LON);
+    if(!s) continue;
+    var ws=new Date(s.getTime()-96*60*1000), we=new Date(ws.getTime()+48*60*1000);
+    var label=(i===0?'Today':(i===1?'Tomorrow':fmtDate(d)));
+    rows+='<tr style="border-bottom:1px solid rgba(160,130,200,0.15);">'+
+      '<td style="padding:10px 8px;">'+label+'</td>'+
+      '<td style="padding:10px 8px; color:var(--gold,#b07820); font-family:\'Cormorant Garamond\',serif; font-size:17px;">'+fmt(ws)+' – '+fmt(we)+'</td>'+
+      '<td style="padding:10px 8px; color:var(--subtle);">'+fmt(s)+'</td>'+
+      '</tr>';
+  }
+  if(rows) document.getElementById('week-body').innerHTML=rows;
 })();
 </script>
