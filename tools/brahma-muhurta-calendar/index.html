@@ -245,28 +245,57 @@ function useGeolocation() {
 }
 
 // ---------- Sunrise calculation (NOAA) ----------
-function calcSunrise(date, lat, lon) {
-  const rad = Math.PI / 180, deg = 180 / Math.PI;
-  const start = new Date(Date.UTC(date.getUTCFullYear(), 0, 0));
-  const N = Math.floor((date - start) / (1000*60*60*24));
-  const lngHour = lon / 15;
-  const t = N + ((6 - lngHour) / 24);
-  const M = (0.9856 * t) - 3.289;
-  let L = M + (1.916 * Math.sin(M*rad)) + (0.020 * Math.sin(2*M*rad)) + 282.634;
-  L = ((L % 360) + 360) % 360;
-  let RA = deg * Math.atan(0.91764 * Math.tan(L*rad));
-  RA = ((RA % 360) + 360) % 360;
-  RA += Math.floor(L/90)*90 - Math.floor(RA/90)*90;
-  RA /= 15;
-  const sinDec = 0.39782 * Math.sin(L*rad);
-  const cosDec = Math.cos(Math.asin(sinDec));
-  const cosH = (Math.cos(90.833*rad) - sinDec*Math.sin(lat*rad)) / (cosDec*Math.cos(lat*rad));
-  if (cosH > 1 || cosH < -1) return null;
-  const H = (360 - deg * Math.acos(cosH)) / 15;
-  const T = H + RA - (0.06571 * t) - 6.622;
-  let UT = ((T - lngHour) % 24 + 24) % 24;
-  const hr = Math.floor(UT), mn = Math.floor((UT-hr)*60), sc = Math.floor(((UT-hr)*60 - mn)*60);
-  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), hr, mn, sc));
+// Compute the sunrise instant for a given LOCAL calendar date in timezone tz,
+// using the full NOAA Solar Calculator algorithm (accurate to ~1 minute).
+// Returns a Date (UTC instant) whose value, when formatted in tz, is the sunrise
+// clock time on that local date. Handles eastern longitudes and daylight-saving
+// transitions by selecting the candidate UTC day that lands on the target local date.
+function calcSunriseLocal(year, month, day, lat, lon, tz) {
+  const rad = Math.PI/180, deg = 180/Math.PI;
+  function julianDay(y, m, d) { // m is 1-based
+    if (m <= 2) { y -= 1; m += 12; }
+    const A = Math.floor(y/100);
+    const B = 2 - A + Math.floor(A/4);
+    return Math.floor(365.25*(y+4716)) + Math.floor(30.6001*(m+1)) + d + B - 1524.5;
+  }
+  function sunriseUTCMinutes(jd) {
+    const JC = (jd - 2451545) / 36525;
+    let L0 = (280.46646 + JC*(36000.76983 + JC*0.0003032)) % 360; if (L0<0) L0+=360;
+    const M = 357.52911 + JC*(35999.05029 - 0.0001537*JC);
+    const e = 0.016708634 - JC*(0.000042037 + 0.0000001267*JC);
+    const C = Math.sin(rad*M)*(1.914602 - JC*(0.004817+0.000014*JC))
+            + Math.sin(rad*2*M)*(0.019993-0.000101*JC)
+            + Math.sin(rad*3*M)*0.000289;
+    const trueLong = L0 + C;
+    const lambda = trueLong - 0.00569 - 0.00478*Math.sin(rad*(125.04 - 1934.136*JC));
+    const obliq = 23 + (26 + ((21.448 - JC*(46.815 + JC*(0.00059 - JC*0.001813))))/60)/60;
+    const obliqCorr = obliq + 0.00256*Math.cos(rad*(125.04 - 1934.136*JC));
+    const decl = deg*Math.asin(Math.sin(rad*obliqCorr)*Math.sin(rad*lambda));
+    let y = Math.tan(rad*(obliqCorr/2)); y = y*y;
+    const eqTime = 4*deg*(y*Math.sin(2*rad*L0) - 2*e*Math.sin(rad*M)
+                 + 4*e*y*Math.sin(rad*M)*Math.cos(2*rad*L0)
+                 - 0.5*y*y*Math.sin(4*rad*L0) - 1.25*e*e*Math.sin(2*rad*M));
+    const haArg = Math.cos(rad*90.833)/(Math.cos(rad*lat)*Math.cos(rad*decl)) - Math.tan(rad*lat)*Math.tan(rad*decl);
+    if (haArg > 1 || haArg < -1) return null; // polar day / night
+    const HA = deg*Math.acos(haArg);
+    return 720 - 4*(lon + HA) - eqTime; // minutes after UTC midnight (may be <0 or >1440)
+  }
+  const jd0 = julianDay(year, month+1, day);
+  let sr = sunriseUTCMinutes(jd0);
+  if (sr === null) return null;
+  const sr2 = sunriseUTCMinutes(jd0 + sr/1440); // one iteration for sub-minute accuracy
+  if (sr2 !== null) sr = sr2;
+  for (const off of [-1, 0, 1]) {
+    const inst = new Date(Date.UTC(year, month, day + off) + Math.round(sr*60000));
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit'
+    }).formatToParts(inst);
+    const ly = +parts.find(p => p.type === 'year').value;
+    const lm = +parts.find(p => p.type === 'month').value;
+    const ld = +parts.find(p => p.type === 'day').value;
+    if (ly === year && lm === month + 1 && ld === day) return inst;
+  }
+  return new Date(Date.UTC(year, month, day) + Math.round(sr*60000));
 }
 
 // ---------- Calendar generation ----------
@@ -289,12 +318,13 @@ function generateCalendar(label, lat, lon, tz) {
   const today = new Date();
   const startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
-  // Calculate for 365 days
+  // Calculate for 365 days using the timezone-aware sunrise function, which
+  // keeps each day's displayed date and sunrise consistent across timezones
+  // and daylight-saving transitions.
   for (let i = 0; i < 365; i++) {
     const d = new Date(startDate);
     d.setDate(d.getDate() + i);
-    const utcD = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    const sunrise = calcSunrise(utcD, lat, lon);
+    const sunrise = calcSunriseLocal(d.getFullYear(), d.getMonth(), d.getDate(), lat, lon, tz);
     if (!sunrise) continue;
     const bmStart = new Date(sunrise.getTime() - 96*60*1000);
     const bmEnd   = new Date(bmStart.getTime() + 48*60*1000);

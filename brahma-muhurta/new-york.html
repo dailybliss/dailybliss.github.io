@@ -5,6 +5,7 @@ description: "Find the Brahma Muhurta time today, tomorrow, and for the next 7 d
 ---
 
 <article class="page content">
+  <style>.bm-cell { font-family: 'Cormorant Garamond', serif; }</style>
   <div class="eyebrow">Brahma Muhurta · New York</div>
   <h1>Brahma Muhurta Time in New York</h1>
   <p class="meta">Today, tomorrow, and the next 7 days — calculated from New York's local sunrise.</p>
@@ -96,33 +97,46 @@ description: "Find the Brahma Muhurta time today, tomorrow, and for the next 7 d
 </article>
 
 <script>
-function calcSunrise(date, lat, lon) {
+function calcSunriseLocal(year, month, day, lat, lon, tz) {
   var rad=Math.PI/180, deg=180/Math.PI;
-  var start=new Date(Date.UTC(date.getUTCFullYear(),0,0));
-  var N=Math.floor((date-start)/(1000*60*60*24));
-  var lngHour=lon/15, t=N+((6-lngHour)/24);
-  var M=(0.9856*t)-3.289;
-  var L=M+(1.916*Math.sin(M*rad))+(0.020*Math.sin(2*M*rad))+282.634; L=((L%360)+360)%360;
-  var RA=deg*Math.atan(0.91764*Math.tan(L*rad)); RA=((RA%360)+360)%360;
-  RA+=Math.floor(L/90)*90-Math.floor(RA/90)*90; RA/=15;
-  var sinDec=0.39782*Math.sin(L*rad), cosDec=Math.cos(Math.asin(sinDec));
-  var cosH=(Math.cos(90.833*rad)-sinDec*Math.sin(lat*rad))/(cosDec*Math.cos(lat*rad));
-  if(cosH>1||cosH<-1) return null;
-  var H=(360-deg*Math.acos(cosH))/15;
-  var T=H+RA-(0.06571*t)-6.622;
-  var UT=((T-lngHour)%24+24)%24;
-  var hr=Math.floor(UT), mn=Math.floor((UT-hr)*60), sc=Math.floor(((UT-hr)*60-mn)*60);
-  return new Date(Date.UTC(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate(),hr,mn,sc));
+  function julianDay(y,m,d){ if(m<=2){y-=1;m+=12;} var A=Math.floor(y/100); var B=2-A+Math.floor(A/4); return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5; }
+  function srMin(jd){
+    var JC=(jd-2451545)/36525;
+    var L0=(280.46646+JC*(36000.76983+JC*0.0003032))%360; if(L0<0)L0+=360;
+    var M=357.52911+JC*(35999.05029-0.0001537*JC);
+    var e=0.016708634-JC*(0.000042037+0.0000001267*JC);
+    var C=Math.sin(rad*M)*(1.914602-JC*(0.004817+0.000014*JC))+Math.sin(rad*2*M)*(0.019993-0.000101*JC)+Math.sin(rad*3*M)*0.000289;
+    var lambda=(L0+C)-0.00569-0.00478*Math.sin(rad*(125.04-1934.136*JC));
+    var obliq=23+(26+((21.448-JC*(46.815+JC*(0.00059-JC*0.001813))))/60)/60;
+    var oc=obliq+0.00256*Math.cos(rad*(125.04-1934.136*JC));
+    var decl=deg*Math.asin(Math.sin(rad*oc)*Math.sin(rad*lambda));
+    var y=Math.tan(rad*(oc/2)); y=y*y;
+    var eqT=4*deg*(y*Math.sin(2*rad*L0)-2*e*Math.sin(rad*M)+4*e*y*Math.sin(rad*M)*Math.cos(2*rad*L0)-0.5*y*y*Math.sin(4*rad*L0)-1.25*e*e*Math.sin(2*rad*M));
+    var ha=Math.cos(rad*90.833)/(Math.cos(rad*lat)*Math.cos(rad*decl))-Math.tan(rad*lat)*Math.tan(rad*decl);
+    if(ha>1||ha<-1) return null;
+    return 720-4*(lon+deg*Math.acos(ha))-eqT;
+  }
+  var jd0=julianDay(year,month+1,day);
+  var sr=srMin(jd0); if(sr===null) return null;
+  var sr2=srMin(jd0+sr/1440); if(sr2!==null) sr=sr2;
+  for(var k=0;k<3;k++){
+    var off=[-1,0,1][k];
+    var inst=new Date(Date.UTC(year,month,day+off)+Math.round(sr*60000));
+    var p=new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(inst);
+    var ly=+p.find(function(x){return x.type==='year';}).value;
+    var lm=+p.find(function(x){return x.type==='month';}).value;
+    var ld=+p.find(function(x){return x.type==='day';}).value;
+    if(ly===year&&lm===month+1&&ld===day) return inst;
+  }
+  return new Date(Date.UTC(year,month,day)+Math.round(sr*60000));
 }
 (function(){
   var LAT=40.713, LON=-74.006, TZ="America/New_York";
   function fmt(d){ return d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true,timeZone:TZ}); }
   function fmtDate(d){ return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:TZ}); }
 
-  // Headline: tomorrow
   var now=new Date(), tom=new Date(now); tom.setDate(now.getDate()+1);
-  var utc=new Date(Date.UTC(tom.getFullYear(),tom.getMonth(),tom.getDate()));
-  var sr=calcSunrise(utc,LAT,LON);
+  var sr=calcSunriseLocal(tom.getFullYear(),tom.getMonth(),tom.getDate(),LAT,LON,TZ);
   if(sr){
     var st=new Date(sr.getTime()-96*60*1000), en=new Date(st.getTime()+48*60*1000);
     document.getElementById('tool-window-display').textContent=fmt(st)+' – '+fmt(en);
@@ -134,18 +148,16 @@ function calcSunrise(date, lat, lon) {
     document.getElementById('tool-loading').textContent='Could not calculate for this date.';
   }
 
-  // 7-day table: today + next 6 days
   var rows='';
   for(var i=0;i<7;i++){
     var d=new Date(now); d.setDate(now.getDate()+i);
-    var u=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
-    var s=calcSunrise(u,LAT,LON);
+    var s=calcSunriseLocal(d.getFullYear(),d.getMonth(),d.getDate(),LAT,LON,TZ);
     if(!s) continue;
     var ws=new Date(s.getTime()-96*60*1000), we=new Date(ws.getTime()+48*60*1000);
     var label=(i===0?'Today':(i===1?'Tomorrow':fmtDate(d)));
     rows+='<tr style="border-bottom:1px solid rgba(160,130,200,0.15);">'+
       '<td style="padding:10px 8px;">'+label+'</td>'+
-      '<td style="padding:10px 8px; color:var(--gold,#b07820); font-family:\'Cormorant Garamond\',serif; font-size:17px;">'+fmt(ws)+' – '+fmt(we)+'</td>'+
+      '<td class="bm-cell" style="padding:10px 8px; color:var(--gold,#b07820); font-size:17px;">'+fmt(ws)+' – '+fmt(we)+'</td>'+
       '<td style="padding:10px 8px; color:var(--subtle);">'+fmt(s)+'</td>'+
       '</tr>';
   }
