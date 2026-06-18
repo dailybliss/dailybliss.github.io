@@ -1,0 +1,276 @@
+---
+layout: default
+title: "Mantra Counter — Free Online Japa Counter"
+description: "A free online mantra counter for your japa practice. Tap or press the spacebar to count, track your progress toward 108, and see how many rounds you've completed today."
+---
+
+<article class="page content">
+  <div class="eyebrow">Free Tool</div>
+  <h1>Mantra Counter</h1>
+  <p class="lede">
+    Count your mantra chants here — tap the circle below, or press the spacebar so you don't
+    need to look at the screen. Your count for today is remembered automatically in this browser.
+  </p>
+
+  <div class="mc-tool">
+    <div class="mc-ring-wrap" id="mc-tap" role="button" aria-label="Tap to count a mantra" tabindex="0">
+      <svg class="mc-ring" viewBox="0 0 220 220">
+        <circle class="mc-ring-bg" cx="110" cy="110" r="95"></circle>
+        <circle class="mc-ring-progress" id="mc-ring-progress" cx="110" cy="110" r="95"></circle>
+      </svg>
+      <div class="mc-ring-center">
+        <div class="mc-count" id="mc-count">0</div>
+        <div class="mc-of108">of 108</div>
+      </div>
+      <div class="mc-flash" id="mc-flash">Round complete ✦</div>
+    </div>
+    <p class="mc-tap-hint">Tap the circle, or press <kbd>Space</kbd></p>
+    <p class="mc-rounds" id="mc-rounds">0 rounds completed today</p>
+    <button class="btn btn-ghost mc-reset" id="mc-reset" type="button">Reset today's count</button>
+  </div>
+
+  <div class="cross-card">
+    <div class="cross-card-text">
+      <strong>Want more from your practice?</strong>
+      <p>MantraCounter saves your daily streak, tracks multiple mantras separately, sets daily and lifetime goals, and keeps your full history — private and offline, on your phone.</p>
+    </div>
+    <a href="{{ '/apps/mantracounter/' | relative_url }}" class="btn">Get MantraCounter →</a>
+  </div>
+
+  <h2>How to Use This Mantra Counter</h2>
+  <p>
+    Each tap or spacebar press counts one repetition. The ring fills as you approach 108 — the
+    traditional length of one round of japa — and a full circuit marks the round complete, after
+    which the count resets and a new round begins. Your rounds completed today are tracked below
+    the counter.
+  </p>
+  <p>
+    Because this tool runs entirely in your browser, today's count stays right here even if you
+    refresh the page — but it isn't saved beyond today, and it isn't synced anywhere. If you want a
+    permanent record of your practice across days, weeks, and mantras, that's exactly what the
+    MantraCounter app is for.
+  </p>
+
+  <h2>Frequently Asked Questions</h2>
+
+  <details class="faq-item">
+    <summary>Does this online mantra counter save my count?</summary>
+    <p>
+      It remembers today's count in your browser so it survives a refresh, but it resets the next
+      day and isn't saved across devices. For a lasting record of your practice, use the
+      <a href="{{ '/apps/mantracounter/' | relative_url }}">MantraCounter app</a>.
+    </p>
+  </details>
+
+  <details class="faq-item">
+    <summary>Why does the counter reset at 108?</summary>
+    <p>
+      108 is the traditional length of one round of japa, the same count as the beads on a mala.
+      When you reach 108, this tool marks the round complete and starts the next one.
+    </p>
+  </details>
+
+  <details class="faq-item">
+    <summary>Can I use this without looking at the screen?</summary>
+    <p>
+      Yes — press the spacebar instead of tapping. It's the easiest key to find by feel, so you can
+      keep your eyes closed while chanting.
+    </p>
+  </details>
+
+  <p style="margin-top:32px; font-size:14px; color:var(--subtle);">
+    Read more: <a href="{{ '/blog/mantra-counter-online/' | relative_url }}">Mantra Counter: Best Ways to Count 108 Mantra Chants</a>
+    · <a href="{{ '/blog/how-to-count-mantras/' | relative_url }}">How to Count Mantras: Japa, Malas &amp; the Meaning of 108</a>
+  </p>
+</article>
+
+<style>
+  .mc-tool {
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid var(--lavender);
+    border-radius: 20px;
+    padding: 40px 32px;
+    margin: 32px 0;
+    text-align: center;
+  }
+  .mc-ring-wrap {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    margin: 0 auto;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mc-ring-wrap:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 6px;
+    border-radius: 50%;
+  }
+  .mc-ring { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .mc-ring-bg {
+    fill: none;
+    stroke: rgba(160, 130, 200, 0.18);
+    stroke-width: 10;
+  }
+  .mc-ring-progress {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 596.9;
+    stroke-dashoffset: 596.9;
+    transition: stroke-dashoffset 0.25s ease;
+  }
+  .mc-ring-center {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .mc-count {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .mc-of108 {
+    font-size: 11px;
+    color: var(--subtle);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .mc-tap-hint {
+    font-size: 12px;
+    color: var(--subtle);
+    margin-top: 22px;
+    letter-spacing: 0.5px;
+  }
+  .mc-tap-hint kbd {
+    background: rgba(176, 120, 32, 0.12);
+    border: 1px solid rgba(176, 120, 32, 0.35);
+    border-radius: 5px;
+    padding: 1px 7px;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    color: var(--gold-dim);
+  }
+  .mc-rounds {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 8px;
+  }
+  .mc-reset { margin-top: 20px; }
+  .mc-flash {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(28, 22, 38, 0.92);
+    border-radius: 50%;
+    color: var(--gold-glow);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    letter-spacing: 1px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .mc-flash.is-visible { opacity: 1; }
+  @media (max-width: 480px) {
+    .mc-ring-wrap { width: 180px; height: 180px; }
+    .mc-count { font-size: 52px; }
+  }
+</style>
+
+<script>
+(function () {
+  var CIRCUMFERENCE = 596.9; // 2 * PI * r(95)
+  var ring = document.getElementById('mc-ring-progress');
+  var countEl = document.getElementById('mc-count');
+  var roundsEl = document.getElementById('mc-rounds');
+  var tapEl = document.getElementById('mc-tap');
+  var resetBtn = document.getElementById('mc-reset');
+  var flashEl = document.getElementById('mc-flash');
+
+  function todayKey() {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  var STORAGE_KEY = 'dailybliss_mantra_counter';
+  var state = { date: todayKey(), count: 0, rounds: 0 };
+
+  try {
+    var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    if (saved && saved.date === todayKey()) {
+      state = saved;
+    }
+  } catch (e) { /* localStorage unavailable — just use defaults */ }
+
+  function save() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function render() {
+    countEl.textContent = state.count;
+    roundsEl.textContent = state.rounds + (state.rounds === 1 ? ' round completed today' : ' rounds completed today');
+    var fraction = Math.min(state.count / 108, 1);
+    ring.style.strokeDashoffset = String(CIRCUMFERENCE * (1 - fraction));
+  }
+
+  function showFlash() {
+    flashEl.classList.add('is-visible');
+    setTimeout(function () { flashEl.classList.remove('is-visible'); }, 1100);
+  }
+
+  function increment() {
+    state.count += 1;
+    if (state.count >= 108) {
+      state.rounds += 1;
+      render();
+      showFlash();
+      setTimeout(function () {
+        state.count = 0;
+        render();
+        save();
+      }, 700);
+      save();
+      return;
+    }
+    render();
+    save();
+  }
+
+  function resetToday() {
+    state = { date: todayKey(), count: 0, rounds: 0 };
+    render();
+    save();
+  }
+
+  tapEl.addEventListener('click', increment);
+  tapEl.addEventListener('keydown', function (e) {
+    if (e.code === 'Enter' || e.code === 'Space') { e.preventDefault(); increment(); }
+  });
+
+  window.addEventListener('keydown', function (e) {
+    if (e.code === 'Space' && e.target.tagName !== 'BUTTON' && e.target !== tapEl) {
+      e.preventDefault();
+      increment();
+    }
+  });
+
+  resetBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    resetToday();
+  });
+
+  render();
+})();
+</script>
