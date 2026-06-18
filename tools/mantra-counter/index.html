@@ -338,6 +338,7 @@ description: "A free online mantra counter for your japa practice. Tap or press 
     try { localStorage.setItem(SOUND_KEY, soundOn ? 'on' : 'off'); } catch (e2) {}
     updateSoundIcon();
     if (soundOn) { getAudioCtx(); playTick(); } // quick confirmation tick when turning on
+    soundBtn.blur(); // release focus so the spacebar resumes counting instead of re-toggling sound
   });
 
   updateSoundIcon();
@@ -414,6 +415,7 @@ description: "A free online mantra counter for your japa practice. Tap or press 
   resetBtn.addEventListener('click', function (e) {
     e.stopPropagation();
     resetToday();
+    resetBtn.blur(); // release focus so the spacebar resumes counting instead of re-triggering reset
   });
 
   render();
