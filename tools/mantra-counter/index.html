@@ -13,6 +13,18 @@ description: "A free online mantra counter for your japa practice. Tap or press 
   </p>
 
   <div class="mc-tool">
+    <button class="mc-sound-toggle" id="mc-sound-toggle" type="button" aria-label="Toggle sound" aria-pressed="true">
+      <svg class="mc-icon-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 9v6h4l5 5V4L8 9H4z"></path>
+        <path d="M16.5 8.5a5 5 0 0 1 0 7"></path>
+        <path d="M19 6a8.5 8.5 0 0 1 0 12"></path>
+      </svg>
+      <svg class="mc-icon-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+        <path d="M4 9v6h4l5 5V4L8 9H4z"></path>
+        <line x1="17" y1="9" x2="22" y2="14"></line>
+        <line x1="22" y1="9" x2="17" y2="14"></line>
+      </svg>
+    </button>
     <div class="mc-ring-wrap" id="mc-tap" role="button" aria-label="Tap to count a mantra" tabindex="0">
       <svg class="mc-ring" viewBox="0 0 220 220">
         <circle class="mc-ring-bg" cx="110" cy="110" r="95"></circle>
@@ -78,6 +90,14 @@ description: "A free online mantra counter for your japa practice. Tap or press 
     </p>
   </details>
 
+  <details class="faq-item">
+    <summary>Does the counter have sound?</summary>
+    <p>
+      Yes — a soft tick for each count and a gentle chime when you complete a round of 108. Sound is
+      on by default; tap the speaker icon in the top corner of the counter to mute it.
+    </p>
+  </details>
+
   <p style="margin-top:32px; font-size:14px; color:var(--subtle);">
     Read more: <a href="{{ '/blog/mantra-counter-online/' | relative_url }}">Mantra Counter: Best Ways to Count 108 Mantra Chants</a>
     · <a href="{{ '/blog/how-to-count-mantras/' | relative_url }}">How to Count Mantras: Japa, Malas &amp; the Meaning of 108</a>
@@ -86,6 +106,7 @@ description: "A free online mantra counter for your japa practice. Tap or press 
 
 <style>
   .mc-tool {
+    position: relative;
     background: rgba(255, 255, 255, 0.55);
     border: 1px solid var(--lavender);
     border-radius: 20px;
@@ -93,6 +114,25 @@ description: "A free online mantra counter for your japa practice. Tap or press 
     margin: 32px 0;
     text-align: center;
   }
+  .mc-sound-toggle {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(160, 130, 200, 0.3);
+    background: rgba(255, 255, 255, 0.6);
+    color: var(--gold-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .mc-sound-toggle:hover { background: rgba(176, 120, 32, 0.12); }
+  .mc-sound-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .mc-sound-toggle.is-muted { color: var(--subtle); opacity: 0.7; }
   .mc-ring-wrap {
     position: relative;
     width: 220px;
@@ -198,6 +238,109 @@ description: "A free online mantra counter for your japa practice. Tap or press 
   var tapEl = document.getElementById('mc-tap');
   var resetBtn = document.getElementById('mc-reset');
   var flashEl = document.getElementById('mc-flash');
+  var soundBtn = document.getElementById('mc-sound-toggle');
+  var iconOn = soundBtn.querySelector('.mc-icon-on');
+  var iconOff = soundBtn.querySelector('.mc-icon-off');
+
+  // --- Sound (synthesized, no audio files needed) ---
+  var SOUND_KEY = 'dailybliss_mantra_counter_sound';
+  var soundOn = true;
+  try {
+    var savedSound = localStorage.getItem(SOUND_KEY);
+    if (savedSound !== null) soundOn = savedSound === 'on';
+  } catch (e) {}
+
+  var audioCtx = null;
+  function getAudioCtx() {
+    if (!audioCtx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      audioCtx = new AC();
+    }
+    if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+    return audioCtx;
+  }
+
+  function tone(freq, startTime, duration, peakGain) {
+    var ctx = getAudioCtx();
+    if (!ctx) return;
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, startTime);
+    gain.gain.exponentialRampToValueAtTime(peakGain, startTime + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(startTime);
+    osc.stop(startTime + duration + 0.02);
+  }
+
+  // Richer, bell-like tone: a fundamental plus a quieter overtone, for the
+  // round-complete chime — gives it body/ring rather than a plain blip.
+  function bellTone(freq, startTime, duration, peakGain) {
+    var ctx = getAudioCtx();
+    if (!ctx) return;
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, startTime);
+    gain.gain.exponentialRampToValueAtTime(peakGain, startTime + 0.008);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(startTime);
+    osc.stop(startTime + duration + 0.02);
+
+    var overtone = ctx.createOscillator();
+    var overtoneGain = ctx.createGain();
+    overtone.type = 'sine';
+    overtone.frequency.value = freq * 2;
+    overtoneGain.gain.setValueAtTime(0.0001, startTime);
+    overtoneGain.gain.exponentialRampToValueAtTime(peakGain * 0.35, startTime + 0.008);
+    overtoneGain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration * 0.6);
+    overtone.connect(overtoneGain);
+    overtoneGain.connect(ctx.destination);
+    overtone.start(startTime);
+    overtone.stop(startTime + duration * 0.6 + 0.02);
+  }
+
+  function playTick() {
+    if (!soundOn) return;
+    var ctx = getAudioCtx();
+    if (!ctx) return;
+    tone(880, ctx.currentTime, 0.09, 0.16);
+  }
+
+  function playChime() {
+    if (!soundOn) return;
+    var ctx = getAudioCtx();
+    if (!ctx) return;
+    var now = ctx.currentTime;
+    bellTone(440, now, 0.9, 0.34);
+    bellTone(660, now + 0.11, 1.0, 0.36);
+    bellTone(880, now + 0.22, 1.2, 0.32);
+  }
+
+  function updateSoundIcon() {
+    iconOn.style.display = soundOn ? '' : 'none';
+    iconOff.style.display = soundOn ? 'none' : '';
+    soundBtn.classList.toggle('is-muted', !soundOn);
+    soundBtn.setAttribute('aria-pressed', String(soundOn));
+    soundBtn.setAttribute('aria-label', soundOn ? 'Mute sound' : 'Unmute sound');
+  }
+
+  soundBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    soundOn = !soundOn;
+    try { localStorage.setItem(SOUND_KEY, soundOn ? 'on' : 'off'); } catch (e2) {}
+    updateSoundIcon();
+    if (soundOn) { getAudioCtx(); playTick(); } // quick confirmation tick when turning on
+  });
+
+  updateSoundIcon();
 
   function todayKey() {
     var d = new Date();
@@ -235,6 +378,7 @@ description: "A free online mantra counter for your japa practice. Tap or press 
     if (state.count >= 108) {
       state.rounds += 1;
       render();
+      playChime();
       showFlash();
       setTimeout(function () {
         state.count = 0;
@@ -244,6 +388,7 @@ description: "A free online mantra counter for your japa practice. Tap or press 
       save();
       return;
     }
+    playTick();
     render();
     save();
   }
