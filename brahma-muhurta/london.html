@@ -1,0 +1,166 @@
+---
+layout: default
+title: "Brahma Muhurta Time in London (Today, Tomorrow & 7 Days)"
+description: "Find the Brahma Muhurta time today, tomorrow, and for the next 7 days in London. Calculated from London's exact local sunrise — free, accurate, no sign-up."
+---
+
+<article class="page content">
+  <style>.bm-cell { font-family: 'Cormorant Garamond', serif; }</style>
+  <div class="eyebrow">Brahma Muhurta · United Kingdom</div>
+  <h1>Brahma Muhurta Time in London</h1>
+  <p class="meta">Today, tomorrow, and the next 7 days — calculated from London's local sunrise.</p>
+
+  <p class="lede">
+    Find the Brahma Muhurta time today and tomorrow in London, plus the full window for the next
+    seven days. Because Brahma Muhurta is calculated from sunrise, the exact time is specific to
+    London and changes a little each day — the times below are calculated live for your dates.
+  </p>
+
+  <div class="tool-panel" id="tool">
+    <div id="tool-loading" class="tool-window">Calculating for London…</div>
+    <div id="tool-result" style="display:none;">
+      <div class="tool-window">Tomorrow's Brahma Muhurta in London</div>
+      <div class="tool-time" id="tool-window-display">—</div>
+      <div class="tool-window">(about 48 minutes)</div>
+      <div class="tool-location" id="tool-loc"></div>
+      <div style="font-size:13px;color:var(--subtle);margin-top:12px;">Sunrise: <span id="tool-sunrise">—</span></div>
+    </div>
+  </div>
+
+  <h2>Brahma Muhurta Time in London — Next 7 Days</h2>
+  <p>
+    The Brahma Muhurta window for London for the coming week. Each day's window begins about 96
+    minutes before local sunrise and lasts about 48 minutes.
+  </p>
+  <div style="overflow-x:auto;">
+    <table id="week-table" style="width:100%; border-collapse:collapse; font-size:15px; margin:16px 0;">
+      <thead>
+        <tr style="border-bottom:2px solid var(--lavender,#d9cfe8);">
+          <th style="text-align:left; padding:10px 8px; font-family:'Cormorant Garamond',serif; font-size:17px; color:var(--ink);">Date</th>
+          <th style="text-align:left; padding:10px 8px; font-family:'Cormorant Garamond',serif; font-size:17px; color:var(--ink);">Brahma Muhurta</th>
+          <th style="text-align:left; padding:10px 8px; font-family:'Cormorant Garamond',serif; font-size:17px; color:var(--ink);">Sunrise</th>
+        </tr>
+      </thead>
+      <tbody id="week-body">
+        <tr><td colspan="3" style="padding:12px 8px; color:var(--subtle);">Calculating…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="cross-card">
+    <div class="cross-card-text">
+      <strong>Want the full year for London?</strong>
+      <p>See every day's Brahma Muhurta time and download an annual calendar.</p>
+    </div>
+    <a href="{{ '/tools/brahma-muhurta-calendar/' | relative_url }}" class="btn btn-ghost">Annual calendar →</a>
+  </div>
+
+  <h2>What is Brahma Muhurta?</h2>
+  <p>
+    Brahma Muhurta is the sacred pre-dawn window traditionally reserved for meditation, yoga, and
+    spiritual practice. The name means "the time of Brahma" or "the hour of the Creator." It begins
+    roughly 1 hour 36 minutes before sunrise and lasts about 48 minutes — one <em>muhurta</em> in the
+    traditional division of the day into thirty muhurtas of 48 minutes each.
+  </p>
+  <p>
+    London is home to one of the largest Indian-origin communities in Europe, with significant communities across Southall, Wembley, and Harrow, and many here keep the practice of rising in Brahma Muhurta for meditation
+    and yoga — a tradition carried from India and adapted to life in United Kingdom.
+  </p>
+
+  <h2>Why the Time Changes Each Day in London</h2>
+  <p>
+    There is no single fixed Brahma Muhurta time in London. At this northern latitude, summer and winter sunrise times differ substantially, so the Brahma Muhurta window can move by more than two hours across the year. Across the year, the
+    Brahma Muhurta time in London can move substantially — often by more than two hours. This is why the times above are calculated
+    from London's real sunrise rather than given as a fixed clock time.
+  </p>
+
+  <h2>Why Practise in Brahma Muhurta?</h2>
+  <p>
+    The window is prized because the mind is naturally calm after sleep, the city is quiet before the
+    day begins, and tradition holds that clarity (<em>sattva</em>) is at its peak. For anyone in
+    London looking to begin a meditation or yoga practice, the Brahma Muhurta window offers the
+    stillest, most undisturbed time of day.
+  </p>
+
+  <div class="cross-card">
+    <div class="cross-card-text">
+      <strong>Brahma Muhurta on your home screen in London</strong>
+      <p>SereneRise shows London's daily Brahma Muhurta time as a widget, updated automatically.</p>
+    </div>
+    <a href="{{ '/apps/serenerise/' | relative_url }}" class="btn">Get SereneRise →</a>
+  </div>
+
+  <p style="font-size:14px;color:var(--subtle);">
+    See also: <a href="{{ '/blog/brahma-muhurta-time-by-city/' | relative_url }}">Brahma Muhurta time by city</a>
+    · <a href="{{ '/blog/brahma-muhurta-complete-guide/' | relative_url }}">the complete guide</a>
+  </p>
+</article>
+
+<script>
+function calcSunriseLocal(year, month, day, lat, lon, tz) {
+  var rad=Math.PI/180, deg=180/Math.PI;
+  function julianDay(y,m,d){ if(m<=2){y-=1;m+=12;} var A=Math.floor(y/100); var B=2-A+Math.floor(A/4); return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5; }
+  function srMin(jd){
+    var JC=(jd-2451545)/36525;
+    var L0=(280.46646+JC*(36000.76983+JC*0.0003032))%360; if(L0<0)L0+=360;
+    var M=357.52911+JC*(35999.05029-0.0001537*JC);
+    var e=0.016708634-JC*(0.000042037+0.0000001267*JC);
+    var C=Math.sin(rad*M)*(1.914602-JC*(0.004817+0.000014*JC))+Math.sin(rad*2*M)*(0.019993-0.000101*JC)+Math.sin(rad*3*M)*0.000289;
+    var lambda=(L0+C)-0.00569-0.00478*Math.sin(rad*(125.04-1934.136*JC));
+    var obliq=23+(26+((21.448-JC*(46.815+JC*(0.00059-JC*0.001813))))/60)/60;
+    var oc=obliq+0.00256*Math.cos(rad*(125.04-1934.136*JC));
+    var decl=deg*Math.asin(Math.sin(rad*oc)*Math.sin(rad*lambda));
+    var y=Math.tan(rad*(oc/2)); y=y*y;
+    var eqT=4*deg*(y*Math.sin(2*rad*L0)-2*e*Math.sin(rad*M)+4*e*y*Math.sin(rad*M)*Math.cos(2*rad*L0)-0.5*y*y*Math.sin(4*rad*L0)-1.25*e*e*Math.sin(2*rad*M));
+    var ha=Math.cos(rad*90.833)/(Math.cos(rad*lat)*Math.cos(rad*decl))-Math.tan(rad*lat)*Math.tan(rad*decl);
+    if(ha>1||ha<-1) return null;
+    return 720-4*(lon+deg*Math.acos(ha))-eqT;
+  }
+  var jd0=julianDay(year,month+1,day);
+  var sr=srMin(jd0); if(sr===null) return null;
+  var sr2=srMin(jd0+sr/1440); if(sr2!==null) sr=sr2;
+  for(var k=0;k<3;k++){
+    var off=[-1,0,1][k];
+    var inst=new Date(Date.UTC(year,month,day+off)+Math.round(sr*60000));
+    var p=new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(inst);
+    var ly=+p.find(function(x){return x.type==='year';}).value;
+    var lm=+p.find(function(x){return x.type==='month';}).value;
+    var ld=+p.find(function(x){return x.type==='day';}).value;
+    if(ly===year&&lm===month+1&&ld===day) return inst;
+  }
+  return new Date(Date.UTC(year,month,day)+Math.round(sr*60000));
+}
+(function(){
+  var LAT=51.5074, LON=-0.1278, TZ="Europe/London";
+  function fmt(d){ return d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true,timeZone:TZ}); }
+  function fmtDate(d){ return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:TZ}); }
+
+  var now=new Date(), tom=new Date(now); tom.setDate(now.getDate()+1);
+  var sr=calcSunriseLocal(tom.getFullYear(),tom.getMonth(),tom.getDate(),LAT,LON,TZ);
+  if(sr){
+    var st=new Date(sr.getTime()-96*60*1000), en=new Date(st.getTime()+48*60*1000);
+    document.getElementById('tool-window-display').textContent=fmt(st)+' – '+fmt(en);
+    document.getElementById('tool-sunrise').textContent=fmt(sr);
+    document.getElementById('tool-loc').textContent='London · '+fmtDate(tom);
+    document.getElementById('tool-result').style.display='block';
+    document.getElementById('tool-loading').style.display='none';
+  } else {
+    document.getElementById('tool-loading').textContent='Could not calculate for this date.';
+  }
+
+  var rows='';
+  for(var i=0;i<7;i++){
+    var d=new Date(now); d.setDate(now.getDate()+i);
+    var s=calcSunriseLocal(d.getFullYear(),d.getMonth(),d.getDate(),LAT,LON,TZ);
+    if(!s) continue;
+    var ws=new Date(s.getTime()-96*60*1000), we=new Date(ws.getTime()+48*60*1000);
+    var label=(i===0?'Today':(i===1?'Tomorrow':fmtDate(d)));
+    rows+='<tr style="border-bottom:1px solid rgba(160,130,200,0.15);">'+
+      '<td style="padding:10px 8px;">'+label+'</td>'+
+      '<td class="bm-cell" style="padding:10px 8px; color:var(--gold,#b07820); font-size:17px;">'+fmt(ws)+' – '+fmt(we)+'</td>'+
+      '<td style="padding:10px 8px; color:var(--subtle);">'+fmt(s)+'</td>'+
+      '</tr>';
+  }
+  if(rows) document.getElementById('week-body').innerHTML=rows;
+})();
+</script>
