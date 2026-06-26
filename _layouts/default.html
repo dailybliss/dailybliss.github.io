@@ -24,8 +24,21 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% if page.url == "/" %}DailyBliss — Spiritual Wellness Apps for Modern Living{% elsif page.title %}{{ page.title }} · {{ site.title }}{% else %}{{ site.title }} — {{ site.description }}{% endif %}</title>
+  <title>{% if page.url == "/" %}DailyBliss — Daily Wellness Practices for Modern Living{% elsif page.title %}{{ page.title }} · {{ site.title }}{% else %}{{ site.title }} — {{ site.description }}{% endif %}</title>
   {% if page.description %}<meta name="description" content="{{ page.description }}">{% else %}<meta name="description" content="{{ site.description }}">{% endif %}
+
+  {% assign og_title = page.title | default: site.title %}
+  {% assign og_image = page.image | default: '/assets/social/og-default.png' %}
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ og_title }}">
+  <meta property="og:description" content="{{ page.description | default: site.description }}">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <meta property="og:image" content="{{ og_image | absolute_url }}">
+  <meta property="og:site_name" content="{{ site.title }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ og_title }}">
+  <meta name="twitter:description" content="{{ page.description | default: site.description }}">
+  <meta name="twitter:image" content="{{ og_image | absolute_url }}">
 
   <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="any">
   <link rel="icon" type="image/png" sizes="16x16" href="{{ '/assets/icons/favicon-16.png' | relative_url }}">
