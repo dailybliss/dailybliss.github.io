@@ -1,5 +1,5 @@
 title: DailyBliss
-description: Spiritual Wellness Apps — rooted in ancient wisdom, designed for modern living.
+description: Daily wellness practices — rooted in ancient wisdom, designed for modern living.
 url: https://dailybliss.app
 email: dailybliss2026@gmail.com
 
@@ -13,6 +13,9 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - vendor/
+
+plugins:
+  - jekyll-sitemap
 
 # Site-wide values usable in templates as site.data.*
 nav:
