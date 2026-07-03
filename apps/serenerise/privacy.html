@@ -32,9 +32,9 @@ description: How SereneRise handles your data — what we collect, how we use it
 
   <p><strong>Android</strong></p>
   <ul>
-    <li><strong>Foreground location</strong> ("While using the app") — used to calculate times when the app is open.</li>
-    <li><strong>Background location</strong> ("Allow all the time") — optional. When granted, the widget refreshes hourly and updates your location automatically when you travel more than 50km. This is designed for users who travel frequently between cities. Without this permission, the widget refreshes daily at midnight using your last saved location.</li>
-    <li>Location is never transmitted to any external server regardless of which permission is granted.</li>
+    <li><strong>Foreground location</strong> ("While using the app") — used to calculate times when the app is open. This permission is <strong>optional</strong> — if you prefer not to grant it, you can set your city manually and the app will calculate accurate times from that.</li>
+    <li><strong>Background location</strong> ("Allow all the time") — optional. When granted, the widget refreshes hourly and updates your location automatically when you travel more than 50km. This is designed for users who travel frequently between cities. Without this permission, the widget refreshes daily at midnight using your last saved location or manually set city.</li>
+    <li>Location is never transmitted to any external server regardless of which permission level is granted.</li>
   </ul>
 
   <p><strong>iOS</strong></p>
@@ -49,7 +49,7 @@ description: How SereneRise handles your data — what we collect, how we use it
   <ul>
     <li>Location data is stored locally on your device only.</li>
     <li>Location is never transmitted to any external server.</li>
-    <li>On iOS, location permission is entirely optional — the app works fully without it if you enter your city manually.</li>
+    <li>Location permission is entirely optional on both Android and iOS — the app works fully without it if you set your city manually.</li>
   </ul>
 
   <h3>Device Information</h3>
@@ -73,9 +73,9 @@ description: How SereneRise handles your data — what we collect, how we use it
 
   <h2>3. How We Use Information</h2>
   <ul>
-    <li>To calculate and display accurate Brahma Muhurta times for your location.</li>
-    <li>To update the home screen widget — hourly on Android when background location is granted (for travellers), or daily at midnight on both Android (without background location) and iOS.</li>
-    <li>To update location automatically when a 50km+ move is detected — on Android this happens in the background (when background location is granted), on iOS this happens when you next open the app.</li>
+    <li>To calculate and display accurate Brahma Muhurta times for your location or manually set city.</li>
+    <li>To update the home screen widget — hourly on Android when background location is granted (for travellers), or daily at midnight on both Android and iOS otherwise.</li>
+    <li>To update location automatically when a 50km+ move is detected — on Android this happens in the background (when background location is granted), on iOS this happens when you next open the app. On both platforms this only applies if location permission has been granted; otherwise the manually set city is used.</li>
     <li>To verify subscription status through Google Play Billing (Android) or Apple In-App Purchases (iOS).</li>
     <li>To improve app stability and performance.</li>
   </ul>
@@ -94,16 +94,21 @@ description: How SereneRise handles your data — what we collect, how we use it
     <li>Subscription and payment processing are handled securely by <strong>Google Play Billing</strong> (Android) or <strong>Apple In-App Purchases</strong> (iOS).</li>
   </ul>
 
-  <h2>6. Background Location (Android only)</h2>
+  <h2>6. Location Permission — Optional on Both Platforms</h2>
   <p>
-    On Android, the App requests background location permission for users who travel frequently.
-    When granted, the widget refreshes hourly and automatically updates your location when
-    you move more than 50km — so the times stay accurate no matter where you are.
-    This permission is <strong>optional</strong>. Without it, the widget refreshes daily at
-    midnight using your last saved location, which is accurate for users who stay in one place.
-    You can always open the app to update your location manually.
+    On both Android and iOS, location permission is entirely optional. If you prefer not
+    to grant it, you can set your city manually and the app calculates accurate Brahma
+    Muhurta times from that. You can update your manual city at any time from within the app.
   </p>
-  <p>When background location is used, it is:</p>
+  <p>
+    On Android, an additional <strong>background location</strong> permission ("Allow all
+    the time") is available for users who travel frequently. When granted, the widget
+    refreshes hourly and automatically updates your location when you move more than 50km
+    — so the times stay accurate no matter where you are. This permission is optional.
+    Without it, the widget refreshes daily at midnight using your last saved location or
+    manually set city.
+  </p>
+  <p>When background location is used on Android, it is:</p>
   <ul>
     <li>Never transmitted to any server</li>
     <li>Never shared with any third party</li>
@@ -111,11 +116,9 @@ description: How SereneRise handles your data — what we collect, how we use it
     <li>Only accessed when a significant location change (50km+) is detected</li>
   </ul>
   <p>
-    On iOS, background location is not requested. Location permission is also fully optional
-    — if you prefer not to grant it, you can enter your city manually and the app calculates
-    accurate times from that. If location access is granted, the app checks on open whether
-    you have moved more than 50km and updates automatically if so. The widget refreshes at
-    midnight with the latest saved location or city.
+    On iOS, background location is not requested. If location access is granted, the app
+    checks on open whether you have moved more than 50km and updates automatically if so.
+    The widget refreshes at midnight with the latest saved location or manually set city.
   </p>
 
   <h2>7. Security</h2>
