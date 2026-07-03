@@ -118,11 +118,11 @@ function gtag_report_conversion(url) {
     <summary>Why does it need location permission?</summary>
     <p>
       Sunrise times depend on your latitude and longitude to calculate the correct Brahma
-      Muhurta window. On Android, location permission is needed for the widget to work
-      accurately. On iOS, location permission is <strong>optional</strong> — if you prefer
-      not to grant it, you can enter your city manually and the app will calculate accurate
-      times from that. Either way, your location is never transmitted or stored on a server.
-      See the <a href="{{ '/apps/serenerise/privacy/' | relative_url }}">privacy policy</a>
+      Muhurta window. On both Android and iOS, location permission is <strong>optional</strong>
+      — if you prefer not to grant it, you can set your city manually and the app will
+      calculate accurate times from that. Either way, your location is never transmitted
+      or stored on a server. See the
+      <a href="{{ '/apps/serenerise/privacy/' | relative_url }}">privacy policy</a>
       for details.
     </p>
   </details>
@@ -152,11 +152,13 @@ function gtag_report_conversion(url) {
   <details class="faq-item">
     <summary>What is the difference between the Android and iOS versions?</summary>
     <p>
-      The core experience is the same on both platforms. Both versions update your location
-      automatically when you move more than 50km — on Android this happens in the background
-      (if background location is granted), on iOS it happens the next time you open the app.
-      The widget refresh also differs: on Android with background location granted the widget
-      refreshes hourly; without it on Android, or on iOS, it refreshes once daily at midnight.
+      The core experience is the same on both platforms. On both Android and iOS, location
+      permission is optional — you can set your city manually if you prefer. If location
+      access is granted, both versions update automatically when you move more than 50km —
+      on Android this happens in the background (if background location is granted), on iOS
+      it happens the next time you open the app. The widget refresh also works the same way
+      on both: it refreshes hourly on Android when background location is granted, or once
+      daily at midnight on both platforms otherwise.
     </p>
   </details>
 
