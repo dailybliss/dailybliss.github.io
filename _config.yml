@@ -15,7 +15,6 @@ exclude:
   - vendor/
 
 plugins:
-  - jekyll-redirect-from
   - jekyll-sitemap
 
 # Site-wide values usable in templates as site.data.*
