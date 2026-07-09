@@ -1,16 +1,35 @@
 ---
 layout: default
-title: "Mantra Counter — Free Online Japa Counter"
+title: "Online Mantra Counter — Free Japa Counter"
 description: "A free online mantra counter for your japa practice. Tap or press the spacebar to count, track your progress toward 108, and see how many rounds you've completed today."
+last_modified_at: 2026-07-04
+permalink: /tools/online-mantra-counter/
+redirect_from:
+  - /tools/online-mantra-counter/
 ---
 
 <article class="page content">
-  <div class="eyebrow">Free Tool</div>
-  <h1>Mantra Counter</h1>
+  <div class="eyebrow">Free Online Tool</div>
+  <h1>Online Mantra Counter</h1>
   <p class="lede">
     Count your mantra chants here — tap the circle below, or press the spacebar so you don't
     need to look at the screen. Your count for today is remembered automatically in this browser.
   </p>
+
+  <div class="mc-deity-area" id="mc-deity-area">
+    <div class="mc-deity-img-wrap" id="mc-deity-img-wrap" title="Tap to add a deity image">
+      <img id="mc-deity-img" src="" alt="Deity image" style="display:none;">
+      <div class="mc-deity-placeholder" id="mc-deity-placeholder">
+        <span style="font-size:28px; opacity:0.4;">ॐ</span>
+        <span class="mc-deity-add-hint">Add image</span>
+      </div>
+    </div>
+    <div class="mc-deity-controls" id="mc-deity-controls" style="display:none;">
+      <button class="mc-deity-change" id="mc-deity-change" type="button">Change</button>
+      <button class="mc-deity-remove" id="mc-deity-remove" type="button">Remove</button>
+    </div>
+    <input type="file" id="mc-deity-input" accept="image/*" style="display:none;" aria-label="Upload deity image">
+  </div>
 
   <div class="mc-tool">
     <button class="mc-sound-toggle" id="mc-sound-toggle" type="button" aria-label="Toggle sound" aria-pressed="true">
@@ -23,6 +42,19 @@ description: "A free online mantra counter for your japa practice. Tap or press 
         <path d="M4 9v6h4l5 5V4L8 9H4z"></path>
         <line x1="17" y1="9" x2="22" y2="14"></line>
         <line x1="22" y1="9" x2="17" y2="14"></line>
+      </svg>
+    </button>
+    <button class="mc-vibrate-toggle" id="mc-vibrate-toggle" type="button" aria-label="Toggle vibration" aria-pressed="true">
+      <svg class="mc-vib-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h2"></path>
+        <path d="M16 5h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2"></path>
+        <rect x="8" y="3" width="8" height="18" rx="1"></rect>
+      </svg>
+      <svg class="mc-vib-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+        <path d="M8 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h2"></path>
+        <path d="M16 5h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2"></path>
+        <rect x="8" y="3" width="8" height="18" rx="1"></rect>
+        <line x1="2" y1="2" x2="22" y2="22" stroke="currentColor" stroke-width="1.8"></line>
       </svg>
     </button>
     <div class="mc-ring-wrap" id="mc-tap" role="button" aria-label="Tap to count a mantra" tabindex="0">
@@ -86,15 +118,27 @@ description: "A free online mantra counter for your japa practice. Tap or press 
     <summary>Can I use this without looking at the screen?</summary>
     <p>
       Yes — press the spacebar instead of tapping. It's the easiest key to find by feel, so you can
-      keep your eyes closed while chanting.
+      keep your eyes closed while chanting. You can also enable vibration so each count gives a
+      gentle pulse through your device — no sound or screen needed.
     </p>
   </details>
 
   <details class="faq-item">
-    <summary>Does the counter have sound?</summary>
+    <summary>Does the counter have sound and vibration?</summary>
     <p>
-      Yes — a soft tick for each count and a gentle chime when you complete a round of 108. Sound is
-      on by default; tap the speaker icon in the top corner of the counter to mute it.
+      Yes — a soft tick for each count and a gentle chime when you complete a round of 108. Tap the
+      speaker icon to mute sound, and the phone icon to toggle vibration. Both are on by default and
+      remembered between visits. On mobile, vibration gives a gentle haptic pulse per count and a
+      distinct pattern on round completion.
+    </p>
+  </details>
+
+  <details class="faq-item">
+    <summary>Can I add a deity image?</summary>
+    <p>
+      Yes — tap the circular area above the counter to upload any image from your device. Your image
+      is stored privately in this browser only — it never leaves your device. Tap "Change" to swap
+      it, or "Remove" to clear it. Images up to 2MB are supported.
     </p>
   </details>
 
@@ -114,6 +158,89 @@ description: "A free online mantra counter for your japa practice. Tap or press 
     margin: 32px 0;
     text-align: center;
   }
+  .mc-deity-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0 8px;
+  }
+  .mc-deity-img-wrap {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 2px dashed rgba(176, 120, 32, 0.35);
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.5);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+  .mc-deity-img-wrap:hover {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(176,120,32,0.12);
+  }
+  .mc-deity-img-wrap.has-image {
+    border-style: solid;
+    border-color: var(--gold);
+  }
+  #mc-deity-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  .mc-deity-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .mc-deity-add-hint {
+    font-size: 10px;
+    color: var(--subtle);
+    letter-spacing: 0.03em;
+    font-family: var(--font-ui, Jost, sans-serif);
+  }
+  .mc-deity-controls {
+    display: flex;
+    gap: 8px;
+  }
+  .mc-deity-change, .mc-deity-remove {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(160,130,200,0.3);
+    background: rgba(255,255,255,0.6);
+    color: var(--subtle);
+    cursor: pointer;
+    font-family: var(--font-ui, Jost, sans-serif);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .mc-deity-change:hover { border-color: var(--gold); color: var(--gold-dim); }
+  .mc-deity-remove:hover { border-color: #c0392b; color: #c0392b; }
+  .mc-vibrate-toggle {
+    position: absolute;
+    top: 54px;
+    right: 16px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(160, 130, 200, 0.3);
+    background: rgba(255, 255, 255, 0.6);
+    color: var(--gold-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .mc-vibrate-toggle:hover { background: rgba(176, 120, 32, 0.12); }
+  .mc-vibrate-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .mc-vibrate-toggle.is-muted { color: var(--subtle); opacity: 0.7; }
   .mc-sound-toggle {
     position: absolute;
     top: 16px;
@@ -241,6 +368,116 @@ description: "A free online mantra counter for your japa practice. Tap or press 
   var soundBtn = document.getElementById('mc-sound-toggle');
   var iconOn = soundBtn.querySelector('.mc-icon-on');
   var iconOff = soundBtn.querySelector('.mc-icon-off');
+  var vibrateBtn = document.getElementById('mc-vibrate-toggle');
+  var vibIconOn = vibrateBtn.querySelector('.mc-vib-on');
+  var vibIconOff = vibrateBtn.querySelector('.mc-vib-off');
+
+  // --- Vibration ---
+  var VIBRATE_KEY = 'dailybliss_mantra_counter_vibrate';
+  var vibrateOn = true;
+  try {
+    var savedVibrate = localStorage.getItem(VIBRATE_KEY);
+    if (savedVibrate !== null) vibrateOn = savedVibrate === 'on';
+  } catch(e) {}
+
+  function updateVibrateIcon() {
+    vibIconOn.style.display = vibrateOn ? '' : 'none';
+    vibIconOff.style.display = vibrateOn ? 'none' : '';
+    vibrateBtn.classList.toggle('is-muted', !vibrateOn);
+    vibrateBtn.setAttribute('aria-pressed', String(vibrateOn));
+    vibrateBtn.setAttribute('aria-label', vibrateOn ? 'Mute vibration' : 'Unmute vibration');
+  }
+
+  function vibrate(pattern) {
+    if (!vibrateOn) return;
+    if (navigator.vibrate) { navigator.vibrate(pattern); }
+  }
+
+  vibrateBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    vibrateOn = !vibrateOn;
+    try { localStorage.setItem(VIBRATE_KEY, vibrateOn ? 'on' : 'off'); } catch(e2) {}
+    updateVibrateIcon();
+    vibrateBtn.blur();
+  });
+  updateVibrateIcon();
+
+  // --- Deity image upload ---
+  var DEITY_IMG_KEY = 'dailybliss_mantra_counter_deity_img';
+  var deityImgWrap = document.getElementById('mc-deity-img-wrap');
+  var deityImg = document.getElementById('mc-deity-img');
+  var deityPlaceholder = document.getElementById('mc-deity-placeholder');
+  var deityControls = document.getElementById('mc-deity-controls');
+  var deityInput = document.getElementById('mc-deity-input');
+  var deityChangeBtn = document.getElementById('mc-deity-change');
+  var deityRemoveBtn = document.getElementById('mc-deity-remove');
+
+  function loadDeityImage(dataUrl) {
+    if (!dataUrl) return;
+    deityImg.src = dataUrl;
+    deityImg.style.display = 'block';
+    deityPlaceholder.style.display = 'none';
+    deityImgWrap.classList.add('has-image');
+    deityControls.style.display = 'flex';
+  }
+
+  function clearDeityImage() {
+    deityImg.src = '';
+    deityImg.style.display = 'none';
+    deityPlaceholder.style.display = 'flex';
+    deityImgWrap.classList.remove('has-image');
+    deityControls.style.display = 'none';
+    try { localStorage.removeItem(DEITY_IMG_KEY); } catch(e) {}
+  }
+
+  // Load saved image on page load
+  try {
+    var savedDeityImg = localStorage.getItem(DEITY_IMG_KEY);
+    if (savedDeityImg) loadDeityImage(savedDeityImg);
+  } catch(e) {}
+
+  // Tap the image area (or placeholder) to open file picker
+  deityImgWrap.addEventListener('click', function() {
+    // Only open picker if no image yet (if image exists, controls handle it)
+    if (!deityImg.src || deityImg.style.display === 'none') {
+      deityInput.click();
+    }
+  });
+
+  deityChangeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    deityInput.click();
+    deityChangeBtn.blur();
+  });
+
+  deityRemoveBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    clearDeityImage();
+    deityRemoveBtn.blur();
+  });
+
+  deityInput.addEventListener('change', function() {
+    var file = deityInput.files && deityInput.files[0];
+    if (!file) return;
+    // Validate it's an image and not too large (max 2MB)
+    if (!file.type.startsWith('image/')) return;
+    if (file.size > 2 * 1024 * 1024) {
+      alert('Image is too large — please choose one under 2MB.');
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var dataUrl = e.target.result;
+      loadDeityImage(dataUrl);
+      try { localStorage.setItem(DEITY_IMG_KEY, dataUrl); } catch(err) {
+        // localStorage quota exceeded — show image this session but can't save
+        console.warn('Could not save deity image to localStorage:', err);
+      }
+    };
+    reader.readAsDataURL(file);
+    // Reset input so same file can be re-selected if removed and re-added
+    deityInput.value = '';
+  });
 
   // --- Sound (synthesized, no audio files needed) ---
   var SOUND_KEY = 'dailybliss_mantra_counter_sound';
@@ -380,6 +617,7 @@ description: "A free online mantra counter for your japa practice. Tap or press 
       state.rounds += 1;
       render();
       playChime();
+      vibrate([80, 40, 80, 40, 200]); // distinctive pattern for round complete
       showFlash();
       setTimeout(function () {
         state.count = 0;
@@ -390,6 +628,7 @@ description: "A free online mantra counter for your japa practice. Tap or press 
       return;
     }
     playTick();
+    vibrate(30); // short pulse per count
     render();
     save();
   }
