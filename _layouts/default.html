@@ -41,11 +41,9 @@
   <meta name="twitter:image" content="{{ og_image | absolute_url }}">
 
   <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="any">
-  <link rel="icon" type="image/png" sizes="16x16" href="{{ '/assets/icons/favicon-16.png' | relative_url }}">
+  <link rel="icon" type="image/png" sizes="96x96" href="{{ '/favicon-96.png' | relative_url }}">
   <link rel="icon" type="image/png" sizes="32x32" href="{{ '/assets/icons/favicon-32.png' | relative_url }}">
-  <link rel="icon" type="image/png" sizes="192x192" href="{{ '/assets/icons/favicon-192.png' | relative_url }}">
-  <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/icons/apple-touch-icon.png' | relative_url }}">
-  <link rel="icon" type="image/png" sizes="512x512" href="{{ '/assets/icons/favicon-512.png' | relative_url }}">
+  <link rel="apple-touch-icon" href="{{ '/apple-touch-icon.png' | relative_url }}">
   <meta name="theme-color" content="#1c1626">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -478,18 +476,6 @@
   .footer-contact { font-size: 13px; color: var(--subtle); margin-bottom: 8px; }
   .footer-contact a { color: var(--gold-dim); opacity: 0.8; }
   .footer-contact a:hover { opacity: 1; }
-  .footer-social { margin-bottom: 10px; }
-  .footer-social-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--gold-dim);
-    opacity: 0.8;
-    font-size: 13px;
-    text-decoration: none;
-    transition: opacity 0.2s;
-  }
-  .footer-social-link:hover { opacity: 1; }
   .footer-legal { font-size: 12px; margin-bottom: 8px; }
   .footer-legal a { color: var(--gold-dim); opacity: 0.7; letter-spacing: 0.5px; }
   .footer-legal a:hover { opacity: 1; }
@@ -522,18 +508,6 @@
   {% include header.html %}
   <main>
     {{ content }}
-    {% if page.url contains '/blog/' and page.url != '/blog/' %}
-    <div style="max-width:740px; margin:0 auto; padding:0 24px;">
-      <p style="margin-top:28px; padding-top:20px; border-top:1px solid var(--lavender-soft); font-size:14px; color:var(--subtle); text-align:center;">
-        <a href="https://www.instagram.com/dailybliss_eternal/" target="_blank" rel="noopener"
-           style="display:inline-flex; align-items:center; gap:7px; color:var(--gold-dim); text-decoration:none; opacity:0.85;"
-           onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"></circle></svg>
-          Follow @dailybliss_eternal on Instagram
-        </a>
-      </p>
-    </div>
-    {% endif %}
   </main>
   {% include footer.html %}
   {% include consent-banner.html %}
