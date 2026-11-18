@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="A searchable library of 47 classical mantras with Devanagari script, transliteration, pronunciation and meaning — from the yogic, Vedic, devotional and Buddhist traditions.">
+  <style>
+    :root { color-scheme: light; }
+    * { }
+    html, body { margin: 0; }
+    body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+    img { max-width: 100%; }
+    [hidden] { display: none !important; }
+  </style>
+  <title>Mantra Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@500;600&display=swap">
+  <style>
+    /* Layout: a calm reading library — sticky search header, responsive card grid, inline expand-to-detail. */
+    :root {
+      --bg: #faf6ef;
+      --surface: #fffdf9;
+      --surface-2: #f3ece0;
+      --ink: #2b2522;
+      --ink-soft: #6b6058;
+      --line: #e4d9c8;
+      --accent: #c0632a;
+      --accent-soft: #e8d3bf;
+      --gold: #a8842c;
+      --script: #8a3d12;
+      --shadow: 0 1px 2px rgba(60,40,20,.05), 0 8px 24px -16px rgba(80,50,20,.25);
+      --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --serif: "Fraunces", Georgia, "Times New Roman", serif;
+      --deva: "Noto Serif Devanagari", "Nirmala UI", "Mangal", serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #1a1613;
+        --surface: #241f1a;
+        --surface-2: #2d2721;
+        --ink: #f0e8dd;
+        --ink-soft: #b4a594;
+        --line: #3a322a;
+        --accent: #e08a4e;
+        --accent-soft: #4a3526;
+        --gold: #cda955;
+        --script: #f0b483;
+        --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -18px rgba(0,0,0,.7);
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #1a1613;
+      --surface: #241f1a;
+      --surface-2: #2d2721;
+      --ink: #f0e8dd;
+      --ink-soft: #b4a594;
+      --line: #3a322a;
+      --accent: #e08a4e;
+      --accent-soft: #4a3526;
+      --gold: #cda955;
+      --script: #f0b483;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -18px rgba(0,0,0,.7);
+      color-scheme: dark;
+    }
+  
+    * { box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.6;
+      margin: 0;
+    }
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding-left: max(16px, env(safe-area-inset-left, 0px));
+      padding-right: max(16px, env(safe-area-inset-right, 0px));
+    }
+  
+    /* Header */
+    header.hero { padding-block: 40px 20px; }
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      margin: 0 0 10px;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: clamp(32px, 6vw, 48px);
+      line-height: 1.05;
+      letter-spacing: -.01em;
+      margin: 0 0 12px;
+      text-wrap: balance;
+    }
+    .lede {
+      color: var(--ink-soft);
+      font-size: 16px;
+      max-width: 60ch;
+      margin: 0;
+    }
+  
+    /* Controls — sticky */
+    .controls {
+      position: sticky;
+      top: env(safe-area-inset-top, 0px);
+      z-index: 10;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+      padding-block: 14px;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0 0 auto;
+      height: env(safe-area-inset-top, 0px);
+      z-index: 11;
+      background: var(--bg);
+    }
+    .search-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .search-box {
+      flex: 1 1 240px;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 0 12px;
+    }
+    .search-box:focus-within { border-color: var(--accent); }
+    .search-box svg { flex: none; color: var(--ink-soft); }
+    #q {
+      flex: 1;
+      min-width: 0;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      padding: 11px 0;
+      outline: none;
+    }
+    .count { color: var(--ink-soft); font-size: 13px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  
+    .filters { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 12px; }
+    .chip {
+      font: inherit;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 13px;
+      cursor: pointer;
+      transition: background .12s, color .12s, border-color .12s;
+    }
+    .chip:hover { border-color: var(--accent); }
+    .chip[aria-pressed="true"] {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    :root[data-theme="dark"] .chip[aria-pressed="true"],
+    .chip[aria-pressed="true"] { color: #fff; }
+  
+    /* Sort toggle */
+    .sort {
+      display: inline-flex;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 3px;
+      flex: none;
+    }
+    .sort button {
+      font: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      background: transparent;
+      border: 0;
+      border-radius: 999px;
+      padding: 6px 13px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .sort button[aria-pressed="true"] {
+      background: var(--surface);
+      color: var(--ink);
+      box-shadow: var(--shadow);
+    }
+    .sort button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  
+    /* Group headings (By tradition) */
+    .group-head {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin: 10px 0 -4px;
+    }
+    .group-head:first-child { margin-top: 0; }
+    .group-head h2 {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 19px;
+      color: var(--script);
+      margin: 0;
+    }
+    .group-head .rule { flex: 1; height: 1px; background: var(--line); }
+    .group-head .n { font-size: 12px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 16px;
+      padding-block: 22px 56px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-head {
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      padding: 18px 18px 16px;
+      font: inherit;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .card-head:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+    .tag {
+      align-self: flex-start;
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--gold);
+      background: var(--surface-2);
+      border-radius: 5px;
+      padding: 3px 8px;
+    }
+    .m-name {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 1.2;
+      margin: 0;
+      text-wrap: balance;
+    }
+    .m-deva {
+      font-family: var(--deva);
+      color: var(--script);
+      font-size: 19px;
+      line-height: 1.7;
+      margin: 0;
+    }
+    .m-translit {
+      color: var(--ink-soft);
+      font-style: italic;
+      font-size: 13.5px;
+      margin: 0;
+    }
+    .m-desc { font-size: 14px; color: var(--ink); margin: 2px 0 0; }
+  
+    .toggle {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12.5px; font-weight: 600; color: var(--accent);
+      margin-top: 2px;
+    }
+    .toggle svg { transition: transform .18s; }
+    .card[open-state="1"] .toggle svg { transform: rotate(180deg); }
+  
+    .detail {
+      border-top: 1px solid var(--line);
+      padding: 4px 18px 20px;
+      display: grid;
+      gap: 14px;
+    }
+    .field { display: grid; gap: 3px; }
+    .field h3 {
+      font-size: 11px;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      font-weight: 700;
+      margin: 0;
+    }
+    .field p { margin: 0; font-size: 14px; }
+  
+    .empty {
+      text-align: center;
+      color: var(--ink-soft);
+      padding: 60px 20px;
+      font-size: 15px;
+    }
+  
+    footer {
+      border-top: 1px solid var(--line);
+      padding-block: 22px 40px;
+      color: var(--ink-soft);
+      font-size: 12.5px;
+    }
+    footer a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <p class="eyebrow">DailyBliss · Sacred Sound</p>
+      <h1>Mantra Library</h1>
+      <p class="lede">A browsable reference of classical mantras from the yogic, Vedic, devotional and Buddhist traditions — each with its script, pronunciation and meaning. Search by name or sound, or filter by tradition, and tap any mantra to open its full entry.</p>
+    </header>
+  </div>
+  
+  <div class="controls">
+    <div class="wrap">
+      <div class="search-row">
+        <label class="search-box">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="q" type="search" placeholder="Search mantras — name, sound or meaning…" autocomplete="off" aria-label="Search mantras">
+        </label>
+        <div class="sort" role="group" aria-label="Sort order">
+          <button type="button" id="sort-az" aria-pressed="true">A–Z</button>
+          <button type="button" id="sort-trad" aria-pressed="false">By tradition</button>
+        </div>
+        <span class="count" id="count"></span>
+      </div>
+      <div class="filters" id="filters" role="group" aria-label="Filter by tradition"></div>
+    </div>
+  </div>
+  
+  <div class="wrap">
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty" hidden>No mantras match that search. Try a different word or clear the filters.</div>
+  </div>
+  
+  <div class="wrap">
+    <footer>
+      A reference for quiet practice. Pronunciations are approximate guides to the Sanskrit and Gurmukhi sounds — listen to a teacher where you can. Part of <a href="https://dailybliss.app">dailybliss.app</a>.
+    </footer>
+  </div>
+  
+  <script>
+  const MANTRAS = [{"name": "Om / Aum", "tradition": "Universal", "devanagari": "ॐ", "translit": "Auṁ", "desc": "The root sound from which the whole tradition of mantra unfolds — a single syllable held to contain the vibration of the entire cosmos. Nearly every other chant opens with it.", "benefit": "Settles a scattered mind quickly and gives the breath a steady anchor. Many practitioners use it alone as a complete practice for grounding before meditation.", "pronunciation": "A drawn-out 'AH–OO–MM', the three sounds flowing into one another and the final hum resonating in the chest.", "meaning": "The three sounds A-U-M are read as waking, dreaming and deep sleep, with the silence after them pointing to pure awareness beyond all three."}, {"name": "So Hum", "tradition": "Vedanta", "devanagari": "सो ऽहम्", "translit": "So Haṁ", "desc": "A breath-paired mantra rather than a sung one: 'So' rides the inhale, 'Hum' the exhale, so the practice happens silently with the natural rhythm of breathing.", "benefit": "Because it needs no counting and no voice, it slips easily into long sitting. It tends to dissolve the sense of effort and quietly steadies attention on the breath.", "pronunciation": "'So' as in 'so', 'Hum' rhyming with 'room' — felt on the breath more than spoken aloud.", "meaning": "It carries the sense 'I am That' — an affirmation that the individual self and the larger reality are not two separate things."}, {"name": "Gayatri Mantra", "tradition": "Vedic", "devanagari": "ॐ भूर्भुवः स्वः । तत्सवितुर्वरेण्यं । भर्गो देवस्य धीमहि । धियो यो नः प्रचोदयात् ॥", "translit": "Oṁ Bhūr Bhuvaḥ Svaḥ, Tat Savitur Vareṇyaṁ, Bhargo Devasya Dhīmahi, Dhiyo Yo Naḥ Prachodayāt", "desc": "One of the oldest prayers in the Vedic corpus, addressed to the light of the sun as the source that quickens the mind. Traditionally chanted at dawn.", "benefit": "Practised daily it is valued for sharpening clarity and lifting the quality of one's thinking. The dawn recitation pairs naturally with an early-morning routine.", "pronunciation": "Keep the long vowels long — 'bhoor', 'dhee-ma-hi', 'pra-cho-da-YAAT' — and let each of the three opening calls stay distinct.", "meaning": "A request that the radiant intelligence behind the sun illuminate and guide our own understanding."}, {"name": "Maha Mrityunjaya", "tradition": "Vedic / Shaiva", "devanagari": "ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम् । उर्वारुकमिव बन्धनान्मृत्योर्मुक्षीय मामृतात् ॥", "translit": "Oṁ Tryambakaṁ Yajāmahe Sugandhiṁ Puṣṭivardhanam, Urvārukam-iva Bandhanān Mṛtyormukṣīya Māmṛtāt", "desc": "The 'great death-conquering' verse, addressed to the three-eyed Shiva. Reached for in times of illness, fear or difficulty.", "benefit": "Chanted for healing, courage and release from fear. Many turn to it during recovery or whenever facing something that feels overwhelming.", "pronunciation": "'Tri-yam-ba-kam ya-JAA-ma-he', and keep the retroflex and aspirated sounds crisp in 'pushti' and 'sugandhim'.", "meaning": "As a ripe fruit falls freely from its stem, may we be freed from the grip of death — yet not cut off from the deathless."}, {"name": "Om Namah Shivaya", "tradition": "Shaiva", "devanagari": "ॐ नमः शिवाय", "translit": "Oṁ Namaḥ Śivāya", "desc": "The five-syllable heart of Shiva devotion, among the most chanted mantras in India. Each syllable is linked to one of the five elements.", "benefit": "A simple, repeatable chant for inner steadiness and surrender. Its short length makes it well suited to mala rounds of 108.", "pronunciation": "'Om na-mah shi-VAA-ya' — the 'shi' soft, the stress gently on the long 'vaa'.", "meaning": "An honouring of Shiva, and through him of the still, auspicious consciousness that the name stands for."}, {"name": "Shiva Mantra", "tradition": "Shaiva", "devanagari": "ॐ नमः शिवाय गुरवे", "translit": "Oṁ Namaḥ Śivāya Gurave", "desc": "An expanded Shiva invocation that folds the teacher into the address, honouring Shiva as the first guru of the tradition.", "benefit": "Used to open practice with reverence for the lineage of teachers as well as the deity. It sets a devotional tone for what follows.", "pronunciation": "'Om na-mah shi-VAA-ya gu-ra-VEH', the final 've' a clear, open vowel.", "meaning": "Salutation to Shiva as the inner teacher — the principle that awakens understanding from within."}, {"name": "Shiva Shambho", "tradition": "Shaiva", "devanagari": "ॐ नमः शिवाय शम्भो", "translit": "Oṁ Namaḥ Śivāya Śambho", "desc": "A warm, call-and-response devotional chant often sung in kirtan, calling Shiva by the tender name Shambho, 'source of joy'.", "benefit": "The repeating melody makes it a favourite for group singing and opening the heart. It lifts the mood and builds a shared rhythm.", "pronunciation": "'Shi-va SHAM-bho', the 'Shambho' landing warmly with an open final 'o'.", "meaning": "A joyful calling of Shiva as the benevolent one who brings well-being and delight."}, {"name": "Om Namo Bhagavate Vasudevaya", "tradition": "Vaishnava", "devanagari": "ॐ नमो भगवते वासुदेवाय", "translit": "Oṁ Namo Bhagavate Vāsudevāya", "desc": "The twelve-syllable Vishnu mantra, addressed to Krishna as Vasudeva, son of Vasudeva. A central chant of Vaishnava devotion.", "benefit": "Practised for devotion, refuge and a sense of being held. Its steady twelve syllables suit sustained japa.", "pronunciation": "'Om na-mo bha-ga-va-te vaa-su-de-VAA-ya', even and unhurried across all twelve beats.", "meaning": "Loving surrender to Vishnu-Krishna, the all-pervading presence dwelling in every being."}, {"name": "Om Namo Narayanaya", "tradition": "Vaishnava", "devanagari": "ॐ नमो नारायणाय", "translit": "Oṁ Namo Nārāyaṇāya", "desc": "The eight-syllable Narayana mantra, honouring Vishnu as the ground of all existence resting on the cosmic waters.", "benefit": "Valued for cultivating peace and trust in a larger order. The compact form is easy to carry through a busy day.", "pronunciation": "'Om na-mo naa-raa-ya-NAA-ya', keeping both long 'aa' sounds full.", "meaning": "Salutation to Narayana, the refuge and resting-place of all that lives."}, {"name": "Om Shri Krishna Balakaya Namah", "tradition": "Vaishnava", "devanagari": "ॐ श्री कृष्ण बालकाय नमः", "translit": "Oṁ Śrī Kṛṣṇa Bālakāya Namaḥ", "desc": "An address to Krishna in his child form, the playful Balakrishna whose innocence and mischief are beloved in devotional lore.", "benefit": "Chanted to invite lightness, joy and tenderness into practice, and often used in prayers for children.", "pronunciation": "'Om shree krish-na baa-la-kaa-ya na-mah', the 'baalaka' soft and affectionate.", "meaning": "Honouring the child Krishna and the uncomplicated joy that his form represents."}, {"name": "Hare Krishna Maha Mantra", "tradition": "Vaishnava", "devanagari": "हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे । हरे राम हरे राम राम राम हरे हरे ॥", "translit": "Hare Kṛṣṇa Hare Kṛṣṇa, Kṛṣṇa Kṛṣṇa Hare Hare, Hare Rāma Hare Rāma, Rāma Rāma Hare Hare", "desc": "The sixteen-word 'great chant' of the Bhakti movement, weaving together the names of Krishna, Rama and the divine feminine energy Hara.", "benefit": "Built for joyful, repetitive singing that carries a group along; it lifts the heart and is easy to learn by ear.", "pronunciation": "'Ha-re KRISH-na… ha-re RAA-ma' — a rolling, song-like cadence that invites call and response.", "meaning": "A direct calling of the divine by name, asking to be drawn into loving service and remembrance."}, {"name": "Govinda Jaya Jaya, Gopala Jaya Jaya", "tradition": "Vaishnava", "devanagari": "गोविन्द जय जय, गोपाल जय जय", "translit": "Govinda Jaya Jaya, Gopāla Jaya Jaya", "desc": "A celebratory kirtan refrain hailing Krishna as Govinda, keeper of cows, and Gopala, the cowherd of Vrindavan.", "benefit": "Pure celebration — it raises energy and cheer in a group and needs no prior knowledge to join in.", "pronunciation": "'Go-VIN-da ja-ya ja-ya, go-PAA-la ja-ya ja-ya', bright and bouncing.", "meaning": "Victory and praise to Krishna in his loving, pastoral forms."}, {"name": "Radhe Govinda", "tradition": "Vaishnava", "devanagari": "राधे गोविन्द", "translit": "Rādhe Govinda", "desc": "A tender pairing of Radha and Krishna, invoking the love between them as the very image of devotion.", "benefit": "Opens the heart in gentle singing and is often used to cultivate sweetness and longing in bhakti practice.", "pronunciation": "'RAA-dhe go-VIN-da', the 'dhe' softly aspirated.", "meaning": "A calling of the divine couple whose love stands for the union of the devotee with the beloved."}, {"name": "Om Shri Ramaya Namah", "tradition": "Vaishnava", "devanagari": "ॐ श्री रामाय नमः", "translit": "Oṁ Śrī Rāmāya Namaḥ", "desc": "A salutation to Rama, the righteous prince of the Ramayana, revered as an embodiment of virtue and steadfastness.", "benefit": "Chanted for integrity, calm resolve and strength of character. Its measured form suits daily repetition.", "pronunciation": "'Om shree raa-MAA-ya na-mah', the long 'aa' of Rama held clearly.", "meaning": "Honouring Rama and the ideal of dharma — right action held to steadily."}, {"name": "Sri Ram Jai Ram Jai Jai Ram", "tradition": "Vaishnava", "devanagari": "श्री राम जय राम जय जय राम", "translit": "Śrī Rāma Jaya Rāma Jaya Jaya Rāma", "desc": "The beloved Ram Dhun, a simple victory-chant to Rama that can be sung endlessly, famously associated with Gandhi's prayer meetings.", "benefit": "Its plain, repeating line makes it a steadying walking or group chant that almost anyone can pick up at once.", "pronunciation": "'Shree raam jai raam, jai jai raam', an even, marching rhythm.", "meaning": "Repeated praise and victory to Rama, holding the name close as a refuge."}, {"name": "Om Sri Hanumate Namah", "tradition": "Vaishnava", "devanagari": "ॐ श्री हनुमते नमः", "translit": "Oṁ Śrī Hanumate Namaḥ", "desc": "An address to Hanuman, the devoted servant of Rama, celebrated for boundless strength, courage and loyalty.", "benefit": "Turned to for courage, protection and the resolve to serve selflessly. Popular before challenges that need bravery.", "pronunciation": "'Om shree ha-nu-ma-te na-mah', light and even through 'hanumate'.", "meaning": "Salutation to Hanuman and the fearless, devoted strength he represents."}, {"name": "Vande Gurunam", "tradition": "Yoga (Ashtanga)", "devanagari": "वन्दे गुरूणां चरणारविन्दे सन्दर्शितस्वात्मसुखावबोधे ।", "translit": "Vande Gurūṇāṁ Caraṇāravinde Sandarśita-svātma-sukhāvabodhe", "desc": "The opening lines of the Ashtanga Yoga invocation, bowing to the lineage of teachers who reveal the happiness of one's own true nature.", "benefit": "Traditionally chanted to begin practice, settling the group and dedicating the session to the teaching lineage.", "pronunciation": "'Van-de gu-roo-naam cha-ra-naa-ra-vin-de…', flowing and reverent.", "meaning": "I bow to the lotus feet of the teachers who awaken in us the joy of recognising our own self."}, {"name": "Patanjali Invocation", "tradition": "Yoga (Ashtanga)", "devanagari": "आबाहु पुरुषाकारं शङ्खचक्रासि धारिणम् । सहस्रशिरसं श्वेतं प्रणमामि पतञ्जलिम् ॥", "translit": "Ābāhu Puruṣākāraṁ Śaṅkha-cakrāsi Dhāriṇam, Sahasra-śirasaṁ Śvetaṁ Praṇamāmi Patañjalim", "desc": "The second half of the Ashtanga invocation, picturing the sage Patanjali — codifier of the Yoga Sutras — in his traditional half-serpent form.", "benefit": "Completes the opening dedication, honouring the source of the yoga teachings before practice begins.", "pronunciation": "'Aa-baa-hu pu-ru-shaa-kaa-ram…' closing 'pra-na-maa-mi pa-tan-ja-lim'.", "meaning": "I bow to Patanjali, radiant and thousand-headed, who gave form to the path of yoga."}, {"name": "Om Gan Ganapataye Namah", "tradition": "Ganesha", "devanagari": "ॐ गं गणपतये नमः", "translit": "Oṁ Gaṁ Gaṇapataye Namaḥ", "desc": "The seed-syllable invocation of Ganesha, the elephant-headed remover of obstacles, called upon at the start of any undertaking.", "benefit": "Chanted before new beginnings — a project, a journey, a study — to clear the way and steady the start.", "pronunciation": "'Om gang ga-na-pa-ta-ye na-mah', the seed sound 'gang' short and nasal.", "meaning": "Salutation to Ganapati, the gracious clearer of obstacles who makes smooth beginnings possible."}, {"name": "Adi Shakti Namo Namo", "tradition": "Kundalini (Sikh/Yogic)", "devanagari": "आदि शक्ति नमो नमो", "translit": "Ādi Śakti Namo Namo", "desc": "A Kundalini Yoga chant bowing to the primal creative power, the feminine energy from which all things arise.", "benefit": "Used to honour and reconnect with inner creative and protective power; many find it grounding and reassuring.", "pronunciation": "'Aa-di shak-ti na-mo na-mo', smooth and repeating.", "meaning": "I bow again and again to the primal power, the source-energy that births creation."}, {"name": "Om Dum Durgayei Namah", "tradition": "Shakta", "devanagari": "ॐ दुं दुर्गायै नमः", "translit": "Oṁ Duṁ Durgāyai Namaḥ", "desc": "The seed invocation of Durga, the fierce protective mother who rides a lion and vanquishes what threatens the good.", "benefit": "Called upon for protection, strength and the courage to face adversity. A chant for standing firm.", "pronunciation": "'Om doom dur-GAA-yai na-mah', the seed 'doom' resonant.", "meaning": "Salutation to Durga, the guarding mother whose power shields and steadies."}, {"name": "Om Krim Kalikayai Namah", "tradition": "Shakta", "devanagari": "ॐ क्रीं कालिकायै नमः", "translit": "Oṁ Krīṁ Kālikāyai Namaḥ", "desc": "The seed invocation of Kali, the fierce goddess of time and transformation who destroys illusion and ego.", "benefit": "Chanted when deep change is needed — to cut through what no longer serves and meet transformation head-on.", "pronunciation": "'Om kreem kaa-li-kaa-yai na-mah', the seed 'kreem' sharp and clear.", "meaning": "Salutation to Kali, the dark mother who liberates by dissolving all that binds."}, {"name": "Om Aim Hrim Klim Chamundaye Viche", "tradition": "Shakta", "devanagari": "ॐ ऐं ह्रीं क्लीं चामुण्डायै विच्चे", "translit": "Oṁ Aiṁ Hrīṁ Klīṁ Cāmuṇḍāyai Vicce", "desc": "The powerful Navarna mantra of the Devi, combining three great seed-sounds with an address to Chamunda, a fierce form of the goddess.", "benefit": "A potent chant for invoking the full force of the divine mother — wisdom, power and protection together.", "pronunciation": "'Om aim hreem kleem chaa-mun-daa-yai vi-che', each seed sound given its own space.", "meaning": "A calling of the goddess through her seed-sounds of speech, abundance and attraction, saluting her as Chamunda."}, {"name": "Om Mahakalaya Namah", "tradition": "Shaiva", "devanagari": "ॐ महाकालाय नमः", "translit": "Oṁ Mahākālāya Namaḥ", "desc": "An address to Mahakala, the great lord of time — Shiva in his aspect as the force beyond which nothing endures.", "benefit": "Chanted to make peace with impermanence and to draw on the steadiness that comes from facing time itself.", "pronunciation": "'Om ma-haa-kaa-laa-ya na-mah', the long vowels of 'mahakala' unhurried.", "meaning": "Salutation to the great timeless one, before whom all forms rise and pass."}, {"name": "Om Mitraya Namah", "tradition": "Surya (Sun)", "devanagari": "ॐ मित्राय नमः", "translit": "Oṁ Mitrāya Namaḥ", "desc": "The first of the Surya Namaskar names, greeting the sun as Mitra, the friend of all beings.", "benefit": "Chanted with the opening of sun salutations to meet the day warmly and set a friendly, open tone.", "pronunciation": "'Om mi-traa-ya na-mah', the 'traa' held briefly long.", "meaning": "Salutation to the sun as the universal friend who shines on everyone alike."}, {"name": "Surya Namaskar Mantra", "tradition": "Surya (Sun)", "devanagari": "ॐ मित्राय नमः … ॐ श्री सवित्रे सूर्यनारायणाय नमः", "translit": "Oṁ Mitrāya Namaḥ … Oṁ Śrī Savitre Sūrya-Nārāyaṇāya Namaḥ", "desc": "The set of twelve solar salutation names, one chanted with each round of Surya Namaskar, each greeting a different quality of the sun.", "benefit": "Turns the physical sequence into a moving prayer, pairing breath, movement and sound in a complete morning practice.", "pronunciation": "Each line follows the pattern 'Om … -aya na-mah'; chant one name per salutation in order.", "meaning": "A cycle of twelve honourings of the sun as friend, shining one, giver of strength, and more."}, {"name": "Om Eim Sarasvatiyei Namaha", "tradition": "Shakta", "devanagari": "ॐ ऐं सरस्वत्यै नमः", "translit": "Oṁ Aiṁ Sarasvatyai Namaḥ", "desc": "The seed invocation of Saraswati, goddess of speech, learning, music and the arts.", "benefit": "Chanted before study, writing or creative work to invite clarity of expression and ease of learning.", "pronunciation": "'Om aim sa-ras-vat-yai na-mah', the seed 'aim' bright and forward.", "meaning": "Salutation to Saraswati, the flowing current of knowledge and the arts."}, {"name": "Om Sri Maha Lakshmiyei Namah", "tradition": "Shakta", "devanagari": "ॐ श्री महालक्ष्म्यै नमः", "translit": "Oṁ Śrī Mahālakṣmyai Namaḥ", "desc": "An address to Lakshmi, goddess of abundance, beauty and well-being in every sense — material and spiritual.", "benefit": "Chanted to welcome prosperity, grace and a feeling of sufficiency and flow into one's life.", "pronunciation": "'Om shree ma-haa-laksh-myai na-mah', the conjunct 'kshmyai' kept light.", "meaning": "Salutation to the great Lakshmi, source of abundance and auspicious grace."}, {"name": "Om Shakti ParaShakti Om", "tradition": "Shakta", "devanagari": "ॐ शक्ति पराशक्ति ॐ", "translit": "Oṁ Śakti Parāśakti Oṁ", "desc": "A chant to Shakti as the supreme power, the dynamic energy animating all of creation.", "benefit": "Used to feel into vitality and the living force within, framed by Om at each end for grounding.", "pronunciation": "'Om shak-ti pa-raa-shak-ti om', the 'paraa' gently stretched.", "meaning": "A calling of power and supreme power — the one energy that moves through everything."}, {"name": "Om Mani Padme Hum", "tradition": "Buddhist", "devanagari": "ॐ मणि पद्मे हूँ", "translit": "Oṁ Maṇi Padme Hūṁ", "desc": "The most widely chanted mantra of Tibetan Buddhism, associated with Avalokiteshvara, the bodhisattva of compassion.", "benefit": "Cultivates compassion and an open heart toward oneself and others; its six syllables suit continuous recitation.", "pronunciation": "'Om ma-ni pad-me hoong', the final 'hum' resonating long.", "meaning": "Often read as 'the jewel in the lotus' — the awakened heart of compassion unfolding within."}, {"name": "Om Tare Tuttare Ture Soha", "tradition": "Buddhist", "devanagari": "ॐ तारे तुत्तारे तुरे स्वाहा", "translit": "Oṁ Tāre Tuttāre Ture Svāhā", "desc": "The mantra of Green Tara, the swift and compassionate liberator who protects from fear and comes quickly to aid.", "benefit": "Chanted for protection, courage and release from anxiety — Tara is called the one who acts without delay.", "pronunciation": "'Om taa-re tut-taa-re tu-re so-ha', lilting and light.", "meaning": "A calling of Tara through her names, asking her swift liberation from fear and suffering."}, {"name": "Gate Gate Paragate Parasamgate Bodhi Svaha", "tradition": "Buddhist", "devanagari": "गते गते पारगते पारसंगते बोधि स्वाहा", "translit": "Gate Gate Pāragate Pārasaṁgate Bodhi Svāhā", "desc": "The closing mantra of the Heart Sutra, a statement of crossing beyond into awakening that distils the whole teaching of emptiness.", "benefit": "Chanted to evoke the sense of letting go completely and moving beyond fixed views toward open awareness.", "pronunciation": "'Ga-te ga-te paa-ra-ga-te paa-ra-sam-ga-te bo-dhi swaa-haa', steady and flowing.", "meaning": "Gone, gone, gone beyond, gone wholly beyond — awakening, so be it."}, {"name": "Asato Ma Sadgamaya", "tradition": "Vedic (Upanishadic)", "devanagari": "असतो मा सद्गमय । तमसो मा ज्योतिर्गमय । मृत्योर्मा अमृतं गमय ॥", "translit": "Asato Mā Sadgamaya, Tamaso Mā Jyotir Gamaya, Mṛtyor Mā Amṛtaṁ Gamaya", "desc": "A luminous prayer from the Brihadaranyaka Upanishad, asking to be led from falsehood to truth, darkness to light, death to the deathless.", "benefit": "Chanted for guidance and aspiration — a gentle, hopeful opening or closing to practice.", "pronunciation": "'A-sa-to maa sad-ga-ma-ya…', each of the three lines given equal weight.", "meaning": "Lead me from the unreal to the real, from darkness to light, from death to immortality."}, {"name": "Purnamadah Purnamidam", "tradition": "Vedic (Upanishadic)", "devanagari": "ॐ पूर्णमदः पूर्णमिदं पूर्णात्पूर्णमुदच्यते । पूर्णस्य पूर्णमादाय पूर्णमेवावशिष्यते ॥", "translit": "Oṁ Pūrṇam Adaḥ Pūrṇam Idaṁ Pūrṇāt Pūrṇam Udacyate, Pūrṇasya Pūrṇam Ādāya Pūrṇam Evāvaśiṣyate", "desc": "The 'fullness' invocation of the Isha Upanishad, a meditation on wholeness that remains whole even when wholeness is drawn from it.", "benefit": "A contemplative chant that eases the mind toward a sense of completeness and sufficiency.", "pronunciation": "'Poor-nam a-dah poor-nam i-dam…', slow enough to feel the repeating 'purna'.", "meaning": "That is whole, this is whole; from the whole the whole arises, and taking the whole from the whole, the whole yet remains."}, {"name": "Om Sahana Vavatu", "tradition": "Vedic (Upanishadic)", "devanagari": "ॐ सह नाववतु । सह नौ भुनक्तु । सह वीर्यं करवावहै ॥", "translit": "Oṁ Saha Nāvavatu, Saha Nau Bhunaktu, Saha Vīryaṁ Karavāvahai", "desc": "A shanti mantra traditionally chanted together by teacher and student before study, asking to be nourished and protected as one.", "benefit": "Sets a cooperative, harmonious tone for learning or any shared endeavour.", "pronunciation": "'Om sa-ha naa-va-va-tu, sa-ha nau bhu-nak-tu…', warm and unifying.", "meaning": "May we be protected together, nourished together, and work together with vigour; may our study be bright and free of discord."}, {"name": "Twameva Mata", "tradition": "Universal", "devanagari": "त्वमेव माता च पिता त्वमेव", "translit": "Tvameva Mātā Ca Pitā Tvameva", "desc": "A heartfelt surrender-prayer that addresses the divine as mother, father, kin and all — often sung to close practice.", "benefit": "Evokes a feeling of being completely held and belonging; a tender way to end a session or a day.", "pronunciation": "'Twa-me-va maa-taa cha pi-taa twa-me-va', flowing and devotional.", "meaning": "You alone are my mother and my father, my kin and my friend — you are everything to me."}, {"name": "Lokah Samastah Sukhino Bhavantu", "tradition": "Universal", "devanagari": "लोकाः समस्ताः सुखिनो भवन्तु", "translit": "Lokāḥ Samastāḥ Sukhino Bhavantu", "desc": "A short, much-loved benediction extending a wish of happiness and freedom to every being everywhere.", "benefit": "A warm closing chant that turns practice outward, dedicating its benefit to all. Easy to memorise and share.", "pronunciation": "'Lo-kaah sa-mas-taah su-khi-no bha-van-tu', open and generous.", "meaning": "May all beings everywhere be happy and free."}, {"name": "Om Sarve Bhavantu Sukhinah", "tradition": "Vedic", "devanagari": "ॐ सर्वे भवन्तु सुखिनः । सर्वे सन्तु निरामयाः ॥", "translit": "Oṁ Sarve Bhavantu Sukhinaḥ, Sarve Santu Nirāmayāḥ", "desc": "A classical peace prayer wishing happiness, health and freedom from suffering for all of creation.", "benefit": "Chanted to cultivate goodwill and a sense of shared welfare; a fitting end to practice or meditation.", "pronunciation": "'Om sar-ve bha-van-tu su-khi-nah, sar-ve san-tu ni-raa-ma-yaah', calm and even.", "meaning": "May all be happy, may all be free from illness, may all see what is good; may none suffer."}, {"name": "Om Shanti Shanti Shanti", "tradition": "Universal", "devanagari": "ॐ शान्तिः शान्तिः शान्तिः", "translit": "Oṁ Śāntiḥ Śāntiḥ Śāntiḥ", "desc": "The threefold invocation of peace that seals most Vedic prayers, the repetition addressing peace on three levels of experience.", "benefit": "A simple, universally useful closing that settles body, mind and surroundings into stillness.", "pronunciation": "'Om shaan-tih shaan-tih shaan-tih', each 'shanti' softer than the last.", "meaning": "Peace, peace, peace — invoked for the body, the mind, and the world around us."}, {"name": "Hari Om Tat Sat", "tradition": "Vedanta", "devanagari": "हरि ॐ तत् सत्", "translit": "Hari Oṁ Tat Sat", "desc": "A compact affirmation joining the name Hari with Om and the Vedantic phrase 'tat sat', pointing to the one true reality.", "benefit": "A grounding phrase for quiet repetition that affirms the reality behind appearances.", "pronunciation": "'Ha-ri om tat sat', clipped and steady.", "meaning": "That absolute reality alone is true — named as Hari, sounded as Om."}, {"name": "Sat Nam", "tradition": "Kundalini (Sikh/Yogic)", "devanagari": "सत् नाम", "translit": "Sat Nām", "desc": "A core Kundalini Yoga mantra and seed of the Sikh tradition, affirming truth as one's very identity.", "benefit": "Used to begin and end practice and to centre oneself in authenticity; short enough for breath-paired repetition.", "pronunciation": "'Sat' crisp, 'Naam' drawn long — often 'Sat' on a short beat and 'Naam' held.", "meaning": "Truth is my name — my essence is the true, the real."}, {"name": "Ek Ong Kar Sat Nam Siri Wahe Guru", "tradition": "Kundalini (Sikh/Yogic)", "devanagari": "ੴ सत् नाम सिरी वाहे गुरु", "translit": "Ek Oṅg Kār Sat Nām Sirī Wāhe Gurū", "desc": "The Adi Shakti / Long Ek Ong Kar mantra of Kundalini Yoga, a complete affirmation of the one creator and the ecstasy of awakening.", "benefit": "A powerful, uplifting chant said to raise and circulate energy; often practised at length in the early morning.", "pronunciation": "'Ek ong kaar, sat naam, si-ri wha-he gu-roo', with long held tones on the key words.", "meaning": "There is one creator whose name is truth; great beyond words is the wisdom that awakens us."}, {"name": "Mul Mantra", "tradition": "Kundalini (Sikh/Yogic)", "devanagari": "ੴ सत् नाम करता पुरख निरभउ निरवैर …", "translit": "Ek Oṅg Kār Sat Nām Kartā Purakh Nirbhau Nirvair …", "desc": "The foundational verse that opens the Guru Granth Sahib, describing the nature of the one reality — true, fearless, without enmity, timeless.", "benefit": "Chanted as a complete meditation on the qualities of the divine; steadying and expansive over long repetition.", "pronunciation": "'Ek ong kaar, sat naam, kar-taa pu-rakh, nir-bhau nir-vair…', unhurried and declarative.", "meaning": "One creator, truth by name, the doer, without fear, without hatred, beyond time and birth — known by grace."}, {"name": "Wahe Guru", "tradition": "Kundalini (Sikh/Yogic)", "devanagari": "वाहे गुरु", "translit": "Wāhe Gurū", "desc": "A mantra of wonder and gratitude, an exclamation at the indescribable experience of being carried from darkness into light.", "benefit": "A simple, joyful phrase for repetition that evokes awe and thankfulness; easy to carry through the day.", "pronunciation": "'Wha-hey gu-roo', the first word almost an outbreath of wonder.", "meaning": "Wondrous is the wisdom that leads from darkness to light — an expression of ecstatic gratitude."}, {"name": "Om Namo Gurudev Namo", "tradition": "Kundalini (Sikh/Yogic)", "devanagari": "ॐ नमो गुरुदेव नमो", "translit": "Oṁ Namo Gurudev Namo", "desc": "A tuning-in chant of reverence to the inner teacher and the wisdom of the lineage, used to open practice.", "benefit": "Centres the practitioner in humility and connection before beginning; a calming preparatory chant.", "pronunciation": "'Om na-mo gu-ru-dev na-mo', smooth and bowing.", "meaning": "I bow to the divine teacher, the light of wisdom within and in the line of teachers."}, {"name": "Ra Ma Da Sa Sa Say So Hung", "tradition": "Kundalini (Sikh/Yogic)", "devanagari": "रा मा दा सा सा से सो हंग", "translit": "Rā Mā Dā Sā, Sā Say So Haṅg", "desc": "The 'Siri Gaitri' healing mantra of Kundalini Yoga, weaving together sun, moon, earth and infinity energies with the self.", "benefit": "Widely used for sending healing — to oneself or others — and for balancing the body's energies.", "pronunciation": "'Raa maa daa saa, saa say so hung', the final 'hung' resonating in the chest.", "meaning": "Sun, moon, earth and the infinite — and the merging of the self with that infinity, invoked for healing."}, {"name": "Sa Ta Na Ma", "tradition": "Kundalini (Sikh/Yogic)", "devanagari": "सा ता ना मा", "translit": "Sā Tā Nā Mā", "desc": "The Panj Shabd, a meditation on the cycle of existence through four primal sounds, often practised with finger movements (mudra).", "benefit": "A structured meditation said to clear the mind and reset mental habits; the finger-tapping adds focus.", "pronunciation": "'Saa taa naa maa', each sound equal and clear, sometimes whispered or silent in stages.", "meaning": "Birth, life, death and rebirth — the endless cycle of creation, drawn from the sounds of 'Sat Nam'."}];
+  
+  const grid = document.getElementById('grid');
+  const qEl = document.getElementById('q');
+  const countEl = document.getElementById('count');
+  const emptyEl = document.getElementById('empty');
+  const filtersEl = document.getElementById('filters');
+  
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  
+  // Build tradition filter chips
+  const traditions = Array.from(new Set(MANTRAS.map(m => m.tradition))).sort();
+  let activeTradition = 'All';
+  let query = '';
+  let sortMode = 'az'; // 'az' | 'trad'
+  
+  // Give every mantra a stable index up front so detail IDs survive re-sorting.
+  MANTRAS.forEach((m, i) => { m._i = i; });
+  const collator = new Intl.Collator('en', { sensitivity: 'base' });
+  const byName = (a, b) => collator.compare(a.name, b.name);
+  
+  function makeChip(label) {
+    const b = document.createElement('button');
+    b.className = 'chip';
+    b.type = 'button';
+    b.textContent = label;
+    b.setAttribute('aria-pressed', label === activeTradition);
+    b.addEventListener('click', () => {
+      activeTradition = label;
+      document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c.textContent === activeTradition));
+      render();
+    });
+    return b;
+  }
+  filtersEl.appendChild(makeChip('All'));
+  traditions.forEach(t => filtersEl.appendChild(makeChip(t)));
+  
+  function matches(m) {
+    if (activeTradition !== 'All' && m.tradition !== activeTradition) return false;
+    if (!query) return true;
+    const hay = (m.name + ' ' + m.translit + ' ' + m.devanagari + ' ' + m.desc + ' ' + m.meaning + ' ' + m.tradition).toLowerCase();
+    return query.toLowerCase().split(/\s+/).every(w => hay.includes(w));
+  }
+  
+  function cardHTML(m) {
+    const i = m._i;
+    return `<article class="card" id="card-${i}">
+      <button class="card-head" aria-expanded="false" data-i="${i}">
+        <span class="tag">${esc(m.tradition)}</span>
+        <h2 class="m-name">${esc(m.name)}</h2>
+        <p class="m-deva" lang="sa">${esc(m.devanagari)}</p>
+        <p class="m-translit">${esc(m.translit)}</p>
+        <p class="m-desc">${esc(m.desc)}</p>
+        <span class="toggle">Full entry
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+        </span>
+      </button>
+      <div class="detail" id="detail-${i}" hidden>
+        <div class="field"><h3>Benefits</h3><p>${esc(m.benefit)}</p></div>
+        <div class="field"><h3>Pronunciation</h3><p>${esc(m.pronunciation)}</p></div>
+        <div class="field"><h3>Meaning</h3><p>${esc(m.meaning)}</p></div>
+      </div>
+    </article>`;
+  }
+  
+  function groupHTML(title, n) {
+    return `<div class="group-head"><h2>${esc(title)}</h2><span class="rule"></span><span class="n">${n}</span></div>`;
+  }
+  
+  function render() {
+    const list = MANTRAS.filter(matches);
+  
+    let html;
+    if (sortMode === 'trad') {
+      const groups = {};
+      list.forEach(m => { (groups[m.tradition] = groups[m.tradition] || []).push(m); });
+      html = Object.keys(groups).sort(collator.compare).map(t => {
+        const items = groups[t].slice().sort(byName);
+        return groupHTML(t, items.length) + items.map(cardHTML).join('');
+      }).join('');
+    } else {
+      html = list.slice().sort(byName).map(cardHTML).join('');
+    }
+  
+    grid.innerHTML = html;
+    emptyEl.hidden = list.length > 0;
+    countEl.textContent = list.length === MANTRAS.length
+      ? `${MANTRAS.length} mantras`
+      : `${list.length} of ${MANTRAS.length}`;
+  
+    grid.querySelectorAll('.card-head').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const i = btn.dataset.i;
+        const detail = document.getElementById('detail-' + i);
+        const card = document.getElementById('card-' + i);
+        const open = detail.hidden;
+        detail.hidden = !open;
+        btn.setAttribute('aria-expanded', open);
+        card.setAttribute('open-state', open ? '1' : '0');
+      });
+    });
+  }
+  
+  qEl.addEventListener('input', () => { query = qEl.value.trim(); render(); });
+  
+  const sortAz = document.getElementById('sort-az');
+  const sortTrad = document.getElementById('sort-trad');
+  function setSort(mode) {
+    sortMode = mode;
+    sortAz.setAttribute('aria-pressed', mode === 'az');
+    sortTrad.setAttribute('aria-pressed', mode === 'trad');
+    render();
+  }
+  sortAz.addEventListener('click', () => setSort('az'));
+  sortTrad.addEventListener('click', () => setSort('trad'));
+  
+  render();
+  </script>
+</body>
+</html>
