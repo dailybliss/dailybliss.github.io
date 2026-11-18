@@ -145,13 +145,13 @@ last_modified_at: 2026-11-18
   }
 
   .ml-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
     margin: 20px 0 8px;
+    max-width: 680px;
   }
   .ml-group-head {
-    grid-column: 1 / -1;
     display: flex;
     align-items: baseline;
     gap: 10px;
@@ -264,7 +264,6 @@ last_modified_at: 2026-11-18
   }
 
   @media (max-width: 480px) {
-    .ml-grid { grid-template-columns: 1fr; }
     .ml-name { font-size: 21px; }
   }
 </style>
