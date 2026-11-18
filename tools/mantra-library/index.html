@@ -238,9 +238,10 @@ last_modified_at: 2026-11-18
   .ml-detail {
     border-top: 1px solid var(--lavender, rgba(160,130,200,0.3));
     padding: 6px 18px 20px;
-    display: grid;
     gap: 14px;
+    display: none;
   }
+  .ml-card[data-open="1"] .ml-detail { display: grid; }
   .ml-field { display: grid; gap: 3px; }
   .ml-field h3 {
     font-family: var(--font-ui, 'Jost', sans-serif);
@@ -333,7 +334,7 @@ last_modified_at: 2026-11-18
           '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg>' +
         '</span>' +
       '</button>' +
-      '<div class="ml-detail" id="ml-detail-' + i + '" hidden>' +
+      '<div class="ml-detail" id="ml-detail-' + i + '">' +
         '<div class="ml-field"><h3>Benefits</h3><p>' + esc(m.benefit) + '</p></div>' +
         '<div class="ml-field"><h3>Pronunciation</h3><p>' + esc(m.pronunciation) + '</p></div>' +
         '<div class="ml-field"><h3>Meaning</h3><p>' + esc(m.meaning) + '</p></div>' +
@@ -369,12 +370,10 @@ last_modified_at: 2026-11-18
     Array.prototype.forEach.call(grid.querySelectorAll('.ml-card-head'), function (btn) {
       btn.addEventListener('click', function () {
         var i = btn.dataset.i;
-        var detail = document.getElementById('ml-detail-' + i);
         var card = document.getElementById('ml-card-' + i);
-        var open = detail.hidden;
-        detail.hidden = !open;
-        btn.setAttribute('aria-expanded', open);
+        var open = card.getAttribute('data-open') !== '1';
         card.setAttribute('data-open', open ? '1' : '0');
+        btn.setAttribute('aria-expanded', open);
       });
     });
   }
