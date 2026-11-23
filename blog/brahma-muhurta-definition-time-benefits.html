@@ -90,6 +90,287 @@ last_modified_at: 2026-11-23
     city-by-city reference, see <a href="{{ '/blog/brahma-muhurta-time-by-city/' | relative_url }}">Brahma
     Muhurta time by city</a>, which lists today and tomorrow's window for major locations.
   </p>
+  <!-- ============================================================
+     DailyBliss — Inline "Today & Tomorrow + 7-day" Brahma Muhurta widget
+     Paste this whole block INSIDE the article, right AFTER the
+     "Find Your Exact Brahma Muhurta Time Today & Tomorrow" <h3> + paragraph.
+     Self-contained: NOAA solar algorithm, no external API, works offline.
+     Timezone/DST handled via IANA timezone + Intl.DateTimeFormat.
+     ============================================================ -->
+<div class="bm-widget" id="bm-widget">
+  <div class="bm-w-head">
+    <h3 style="margin:0;">Your Brahma Muhurta: Today &amp; Tomorrow</h3>
+    <p class="bm-w-sub">Calculated from your exact location, right in your browser — no sign-up, no tracking.</p>
+  </div>
+
+  <div class="bm-w-controls">
+    <button type="button" id="bm-locate" class="bm-btn">📍 Use my location</button>
+    <span class="bm-or">or</span>
+    <select id="bm-city" class="bm-select" aria-label="Choose a city">
+      <option value="">Choose a city…</option>
+    </select>
+  </div>
+
+  <p class="bm-w-status" id="bm-status">Tap “Use my location” or pick a city to see today and tomorrow’s window.</p>
+
+  <div class="bm-cards" id="bm-cards" hidden>
+    <div class="bm-card">
+      <div class="bm-card-label">Today</div>
+      <div class="bm-card-time" id="bm-today">—</div>
+      <div class="bm-card-sub" id="bm-today-sun">Sunrise —</div>
+    </div>
+    <div class="bm-card">
+      <div class="bm-card-label">Tomorrow</div>
+      <div class="bm-card-time" id="bm-tomorrow">—</div>
+      <div class="bm-card-sub" id="bm-tomorrow-sun">Sunrise —</div>
+    </div>
+  </div>
+
+  <div class="bm-week" id="bm-week" hidden>
+    <div class="bm-week-head">Next 7 days</div>
+    <table class="bm-week-table">
+      <thead><tr><th>Date</th><th>Brahma Muhurta</th><th>Sunrise</th></tr></thead>
+      <tbody id="bm-week-body"></tbody>
+    </table>
+    <a href="{{ '/tools/brahma-muhurta-calendar/' | relative_url }}" class="bm-btn bm-btn-ghost" style="margin-top:14px;">See the full year calendar →</a>
+  </div>
+
+  <p class="bm-w-note" id="bm-loc-label" hidden></p>
+  <p class="bm-w-foot">
+    Window = sunrise − 96 min (start) to sunrise − 48 min (end), a 48-minute period. Times are shown in
+    the location’s own timezone and account for daylight saving. For any other city, use the
+    <a href="{{ '/tools/brahma-muhurta/' | relative_url }}">full Brahma Muhurta calculator</a>.
+  </p>
+</div>
+
+<style>
+  .bm-widget {
+    border: 1px solid var(--lavender, rgba(160,130,200,0.3));
+    background: rgba(255,255,255,0.55);
+    border-radius: 18px;
+    padding: 24px 22px;
+    margin: 28px 0;
+  }
+  .bm-w-head h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; }
+  .bm-w-sub { font-size: 14px; color: var(--subtle); margin: 6px 0 0; }
+  .bm-w-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 18px 0 6px; }
+  .bm-btn {
+    font: inherit; font-weight: 600; font-size: 14px;
+    background: var(--gold, #b0781f); color: #fff; border: 0;
+    border-radius: 10px; padding: 10px 16px; cursor: pointer;
+  }
+  .bm-btn:hover { filter: brightness(1.05); }
+  .bm-btn-ghost {
+    display: inline-block; background: transparent; color: var(--gold-dim, var(--gold, #b0781f));
+    border: 1px solid var(--gold, #b0781f); text-decoration: none;
+  }
+  .bm-or { color: var(--subtle); font-size: 13px; }
+  .bm-select {
+    font: inherit; font-size: 14px; padding: 10px 12px; border-radius: 10px;
+    border: 1px solid var(--lavender, rgba(160,130,200,0.3));
+    background: #fff; color: var(--ink, #2b2522); min-width: 180px; max-width: 100%;
+  }
+  .bm-w-status { font-size: 14px; color: var(--subtle); margin: 10px 0 0; }
+  .bm-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
+  .bm-card {
+    background: rgba(176,120,32,0.08);
+    border: 1px solid rgba(176,120,32,0.22);
+    border-radius: 14px; padding: 16px; text-align: center;
+  }
+  .bm-card-label {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    font-weight: 700; color: var(--gold-dim, var(--gold, #b0781f));
+  }
+  .bm-card-time {
+    font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600;
+    color: var(--ink, #2b2522); margin: 6px 0 4px; font-variant-numeric: tabular-nums;
+  }
+  .bm-card-sub { font-size: 12.5px; color: var(--subtle); font-variant-numeric: tabular-nums; }
+  .bm-week { margin-top: 20px; }
+  .bm-week-head {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    font-weight: 700; color: var(--subtle); margin-bottom: 8px;
+  }
+  .bm-week-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .bm-week-table th {
+    text-align: left; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--subtle); font-weight: 600; padding: 6px 8px; border-bottom: 1px solid var(--lavender, rgba(160,130,200,0.3));
+  }
+  .bm-week-table td { padding: 8px; border-bottom: 1px solid rgba(160,130,200,0.14); font-variant-numeric: tabular-nums; }
+  .bm-week-table td:first-child { color: var(--subtle); white-space: nowrap; }
+  .bm-w-note { font-size: 13px; color: var(--gold-dim, var(--gold)); margin: 14px 0 0; font-weight: 600; }
+  .bm-w-foot { font-size: 12.5px; color: var(--subtle); margin: 14px 0 0; line-height: 1.6; }
+  @media (max-width: 480px) {
+    .bm-cards { grid-template-columns: 1fr; }
+    .bm-card-time { font-size: 23px; }
+  }
+</style>
+
+<script>
+(function () {
+  // ---------- City fallback list (name, lat, lon, IANA timezone) ----------
+  // Timezone carried per city so DST is applied correctly for the right date.
+  var CITIES = [
+    ["Mumbai, India", 19.0760, 72.8777, "Asia/Kolkata"],
+    ["Delhi, India", 28.6139, 77.2090, "Asia/Kolkata"],
+    ["Bengaluru, India", 12.9716, 77.5946, "Asia/Kolkata"],
+    ["Hyderabad, India", 17.3850, 78.4867, "Asia/Kolkata"],
+    ["Chennai, India", 13.0827, 80.2707, "Asia/Kolkata"],
+    ["Kolkata, India", 22.5726, 88.3639, "Asia/Kolkata"],
+    ["Pune, India", 18.5204, 73.8567, "Asia/Kolkata"],
+    ["Ahmedabad, India", 23.0225, 72.5714, "Asia/Kolkata"],
+    ["Jaipur, India", 26.9124, 75.7873, "Asia/Kolkata"],
+    ["Lucknow, India", 26.8467, 80.9462, "Asia/Kolkata"],
+    ["Varanasi, India", 25.3176, 82.9739, "Asia/Kolkata"],
+    ["Rishikesh, India", 30.0869, 78.2676, "Asia/Kolkata"],
+    ["London, UK", 51.5074, -0.1278, "Europe/London"],
+    ["New York, USA", 40.7128, -74.0060, "America/New_York"],
+    ["Chicago, USA", 41.8781, -87.6298, "America/Chicago"],
+    ["Los Angeles, USA", 34.0522, -118.2437, "America/Los_Angeles"],
+    ["Toronto, Canada", 43.6532, -79.3832, "America/Toronto"],
+    ["Dubai, UAE", 25.2048, 55.2708, "Asia/Dubai"],
+    ["Singapore", 1.3521, 103.8198, "Asia/Singapore"],
+    ["Sydney, Australia", -33.8688, 151.2093, "Australia/Sydney"],
+    ["Melbourne, Australia", -37.8136, 144.9631, "Australia/Melbourne"],
+    ["Auckland, New Zealand", -36.8485, 174.7633, "Pacific/Auckland"]
+  ];
+
+  // ---------- NOAA sunrise algorithm (returns a UTC Date for sunrise) ----------
+  // DST-proof: sunrise is computed as an absolute UTC instant; DST only affects display.
+  var rad = Math.PI / 180, deg = 180 / Math.PI;
+  function toJulian(d){ return d.valueOf()/86400000 + 2440587.5; }
+  function fromJulian(j){ return new Date((j - 2440587.5) * 86400000); }
+
+  function sunriseUTC(date, lat, lon) {
+    // Julian day at 0h UTC for the given calendar date.
+    var jDay = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())/86400000 + 2440587.5;
+    var n = Math.round(jDay - 2451545.0 - 0.0009 + lon/360.0); // day count, longitude-adjusted
+    var Jstar = 2451545.0 + 0.0009 - lon/360.0 + n;            // mean solar noon (Julian)
+    var M = (357.5291 + 0.98560028 * (Jstar - 2451545.0)) % 360; // solar mean anomaly
+    var Mr = M * rad;
+    var C = 1.9148*Math.sin(Mr) + 0.0200*Math.sin(2*Mr) + 0.0003*Math.sin(3*Mr);
+    var L = (M + C + 180 + 102.9372) % 360;            // ecliptic longitude
+    var Lr = L * rad;
+    var Jtransit = Jstar + 0.0053*Math.sin(Mr) - 0.0069*Math.sin(2*Lr); // solar transit (noon)
+    var delta = Math.asin(Math.sin(Lr) * Math.sin(23.44*rad)); // sun declination
+    var latR = lat * rad;
+    var cosH = (Math.sin(-0.833*rad) - Math.sin(latR)*Math.sin(delta)) /
+               (Math.cos(latR)*Math.cos(delta));
+    if (cosH > 1) return null;   // sun never rises (polar night)
+    if (cosH < -1) return null;  // sun never sets (polar day)
+    var H = Math.acos(cosH) * deg;
+    var Jrise = Jtransit - (H/360.0);
+    return fromJulian(Jrise);
+  }
+
+  // ---------- Formatting in a given IANA timezone (handles DST automatically) ----------
+  function fmtTime(utcDate, tz) {
+    try {
+      return new Intl.DateTimeFormat('en-US', {
+        hour: 'numeric', minute: '2-digit', hour12: true, timeZone: tz
+      }).format(utcDate);
+    } catch (e) {
+      return new Intl.DateTimeFormat('en-US', { hour:'numeric', minute:'2-digit', hour12:true }).format(utcDate);
+    }
+  }
+  function fmtDate(d, tz) {
+    try {
+      return new Intl.DateTimeFormat('en-US', { weekday:'short', day:'numeric', month:'short', timeZone: tz }).format(d);
+    } catch(e) {
+      return new Intl.DateTimeFormat('en-US', { weekday:'short', day:'numeric', month:'short' }).format(d);
+    }
+  }
+
+  var START_OFFSET = 96 * 60000; // 96 min before sunrise
+  var END_OFFSET   = 48 * 60000; // 48 min before sunrise
+
+  function windowFor(date, lat, lon, tz) {
+    var sr = sunriseUTC(date, lat, lon);
+    if (!sr) return null;
+    var start = new Date(sr.getTime() - START_OFFSET);
+    var end   = new Date(sr.getTime() - END_OFFSET);
+    return {
+      range: fmtTime(start, tz) + ' – ' + fmtTime(end, tz),
+      sunrise: fmtTime(sr, tz)
+    };
+  }
+
+  // ---------- DOM ----------
+  var statusEl = document.getElementById('bm-status');
+  var cardsEl  = document.getElementById('bm-cards');
+  var weekEl   = document.getElementById('bm-week');
+  var weekBody = document.getElementById('bm-week-body');
+  var locLabel = document.getElementById('bm-loc-label');
+  var citySel  = document.getElementById('bm-city');
+
+  CITIES.forEach(function (c, i) {
+    var o = document.createElement('option');
+    o.value = String(i); o.textContent = c[0];
+    citySel.appendChild(o);
+  });
+
+  function render(lat, lon, tz, label) {
+    var now = new Date();
+    var tomorrow = new Date(now.getTime() + 86400000);
+
+    var t = windowFor(now, lat, lon, tz);
+    var tm = windowFor(tomorrow, lat, lon, tz);
+
+    if (!t) {
+      statusEl.textContent = 'At this location the sun does not rise or set normally on this date, so a Brahma Muhurta window cannot be shown.';
+      cardsEl.hidden = true; weekEl.hidden = true;
+      return;
+    }
+
+    document.getElementById('bm-today').textContent = t.range;
+    document.getElementById('bm-today-sun').textContent = 'Sunrise ' + t.sunrise;
+    document.getElementById('bm-tomorrow').textContent = tm ? tm.range : '—';
+    document.getElementById('bm-tomorrow-sun').textContent = tm ? ('Sunrise ' + tm.sunrise) : 'Sunrise —';
+
+    // 7-day table
+    weekBody.innerHTML = '';
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(now.getTime() + i*86400000);
+      var w = windowFor(d, lat, lon, tz);
+      if (!w) continue;
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td>' + fmtDate(d, tz) + '</td><td>' + w.range + '</td><td>' + w.sunrise + '</td>';
+      weekBody.appendChild(tr);
+    }
+
+    statusEl.hidden = true;
+    cardsEl.hidden = false;
+    weekEl.hidden = false;
+    if (label) { locLabel.textContent = 'Showing: ' + label; locLabel.hidden = false; }
+  }
+
+  // Geolocation
+  document.getElementById('bm-locate').addEventListener('click', function () {
+    if (!navigator.geolocation) {
+      statusEl.textContent = 'Your browser does not support location. Please choose a city instead.';
+      return;
+    }
+    statusEl.hidden = false;
+    statusEl.textContent = 'Finding your location…';
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      var tz;
+      try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone; } catch(e) { tz = undefined; }
+      render(pos.coords.latitude, pos.coords.longitude, tz, 'your current location');
+      citySel.value = '';
+    }, function () {
+      statusEl.textContent = 'Location access was declined. Pick a city below, or open the full calculator.';
+    }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 3600000 });
+  });
+
+  // City select
+  citySel.addEventListener('change', function () {
+    var v = citySel.value;
+    if (v === '') return;
+    var c = CITIES[parseInt(v, 10)];
+    render(c[1], c[2], c[3], c[0]);
+  });
+})();
+</script>
   <p>
     If you would rather it appear automatically each morning, the
     <a href="{{ '/apps/serenerise/' | relative_url }}">SereneRise app</a> places today's exact
