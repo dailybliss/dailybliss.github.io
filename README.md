@@ -1,101 +1,51 @@
-# DailyBliss Website
+# DailyBliss
 
-Jekyll-based static site for DailyBliss, hosted on GitHub Pages.
+**DailyBliss builds thoughtfully crafted spiritual-wellness apps and free online tools — rooted in ancient wisdom, designed for modern living.**
 
-## Structure
+🌐 **Website:** [dailybliss.app](https://dailybliss.app)
+📷 **Instagram:** [@dailybliss_eternal](https://www.instagram.com/dailybliss_eternal/)
 
-```
-.
-├── _config.yml                    # Site config, nav definitions
-├── _includes/
-│   ├── header.html                # Shared top nav
-│   └── footer.html                # Shared footer
-├── _layouts/
-│   └── default.html               # Shared layout (CSS, chrome)
-├── assets/
-│   ├── serenerise.jpg             # SereneRise app icon
-│   └── vedicwisdom.jpg            # Vedic Wisdom app icon
-├── index.html                     # Homepage
-├── apps/
-│   ├── index.html                 # Apps listing
-│   ├── serenerise/
-│   │   ├── index.html             # Marketing page + FAQ
-│   │   └── privacy.html           # Privacy policy (link to this from Play Store)
-│   └── vedicwisdom/
-│       ├── index.html
-│       └── privacy.html
-├── tools/
-│   ├── index.html                 # Tools listing
-│   └── brahma-muhurta/
-│       └── index.html             # Interactive calculator
-└── blog/
-    ├── index.html
-    └── what-is-brahma-muhurta.html
-```
+DailyBliss helps people bring timeless spiritual practices — rising in the sacred pre-dawn hour of **Brahma Muhurta**, chanting mantras, and daily **japa** — into everyday modern life. Our apps are private and offline-first, with no ads and no tracking, alongside free browser-based tools that need no sign-up.
 
-## URLs
-
-GitHub Pages will serve clean URLs (because `permalink: pretty` is set in `_config.yml`):
-
-- `/` — homepage
-- `/apps/serenerise/` — SereneRise page
-- `/apps/serenerise/privacy/` — SereneRise privacy policy (use this URL in your Play Store listing)
-- `/apps/vedicwisdom/` — Vedic Wisdom page
-- `/apps/vedicwisdom/privacy/` — Vedic Wisdom privacy policy
-- `/tools/brahma-muhurta/` — Brahma Muhurta calculator
-- `/blog/` — blog index
-- `/blog/what-is-brahma-muhurta/` — first article
-
-## Deployment
-
-Jekyll runs automatically on GitHub Pages. Just push to the branch you've configured for Pages (typically `main` or `gh-pages`) and it'll build and deploy within a minute or two.
-
-## Editing
-
-### Adding a new page
-
-Create the HTML file with Jekyll front matter at the top:
-
-```
----
-layout: default
-title: Page Title
-description: Meta description for search engines.
 ---
 
-<article class="page">
-  <h1>Page content here</h1>
-  ...
-</article>
-```
+## Apps
 
-### Adding a new app
+### SereneRise — Brahma Muhurta Time & Widget
+Precise daily **Brahma Muhurta** times for your exact location, right on your home screen. SereneRise calculates the sacred pre-dawn window (roughly 96 to 48 minutes before sunrise) from your precise coordinates, works anywhere in the world, updates automatically each day, and runs fully offline with no ads, account, or tracking. The Android version is localized into 25+ languages.
 
-1. Create `apps/<appname>/index.html` — copy from an existing app as template.
-2. Create `apps/<appname>/privacy.html` — copy + edit.
-3. Add an icon to `assets/<appname>.jpg` (512×512 recommended).
-4. Add a card to the homepage (`index.html`) and the apps listing (`apps/index.html`).
+- **Platforms:** Android & iOS
+- **Google Play:** https://play.google.com/store/apps/details?id=com.dailybliss.serenerise
+- **App Store:** https://apps.apple.com/us/app/serenerise/id6767189781
+- **Learn more:** [dailybliss.app/apps/serenerise](https://dailybliss.app/apps/serenerise/)
 
-### Adding a blog post
+### MantraCounter — Mantra Chanting & Japa Tracker
+Enroll your mantras, set daily and lifetime goals, chant with focus, and track your spiritual practice over time — a private, distraction-free digital **japa** counter for daily mantra practice.
 
-1. Create `blog/<slug>.html` with front matter.
-2. Add an entry to the list in `blog/index.html`.
+- **Platforms:** Android (iOS in progress)
+- **Google Play:** https://play.google.com/store/apps/details?id=com.dailybliss.mantracounter
+- **App Store:** https://apps.apple.com/us/app/mantra-counter-japa-tracker/id6783311196
+- **Learn more:** [dailybliss.app/apps/mantracounter](https://dailybliss.app/apps/mantracounter/)
 
-### Adding a nav item
+---
 
-Edit the `nav:` list in `_config.yml`.
+## Free online tools (no download, no sign-up)
 
-### Updating privacy policies
+- **[Brahma Muhurta Calculator](https://dailybliss.app/tools/brahma-muhurta/)** — today's exact pre-dawn window for your location.
+- **[Brahma Muhurta Calendar](https://dailybliss.app/tools/brahma-muhurta-calendar/)** — the Brahma Muhurta window for any city, month by month.
+- **[Online Mantra Counter](https://dailybliss.app/tools/mantra-counter/)** — a free japa counter: tap or press space, track rounds of 108.
+- **[Mantra Library](https://dailybliss.app/tools/mantra-library/)** — classical mantras with Devanagari, transliteration, pronunciation, and meaning.
 
-Both privacy policies live at `apps/<appname>/privacy.html`. The "Last updated" date in the page body should be updated whenever you change anything substantive.
+---
 
-## Local preview (optional)
+## Writing
 
-If you have Ruby installed:
+The [DailyBliss blog](https://dailybliss.app/blog/) covers spiritual practice and the wisdom behind it:
 
-```bash
-bundle install
-bundle exec jekyll serve
-```
+- **Brahma Muhurta** — meaning, timing, benefits, the science of the pre-dawn hour, and what to practise.
+- **Mantras** — meaning, benefits, and correct chanting of the Gayatri Mantra, Maha Mrityunjaya Mantra, Om, Om Namah Shivaya, Hare Krishna Maha Mantra, and more.
+- **Japa & meditation** — how to count mantras, the meaning of 108, and daily practice.
 
-Then visit `http://localhost:4000`.
+---
+
+© 2026 DailyBliss. All rights reserved. The code and content in this repository are copyright DailyBliss and are not licensed for reuse, reproduction, or redistribution.
